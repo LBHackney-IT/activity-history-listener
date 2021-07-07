@@ -59,7 +59,7 @@ bin/
 .idea/
 tmp/
 .vs/
-/notes-api.Tests/Properties/launchSettings.json
+/ActivityListener/.lambda-test-tool/
 
 .fake
 .ionide
