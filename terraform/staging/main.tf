@@ -38,63 +38,63 @@ terraform {
 }
 
 
-# data "aws_ssm_parameter" "person_sns_topic_arn" {
-#   name = "/sns-topic/staging/person/arn"
-# }
-# 
-# resource "aws_sqs_queue" "activity_history_dead_letter_queue" {
-#   name                        = "activityhistorydeadletterqueue.fifo"
-#   fifo_queue                  = true
-#   content_based_deduplication = true
-#   kms_master_key_id           = "alias/housing-staging-cmk"
-#   kms_data_key_reuse_period_seconds = 300
-# }
-# 
-# resource "aws_sqs_queue" "activity_history_queue" {
-#   name                        = "activityhistoryqueue.fifo"
-#   fifo_queue                  = true
-#   content_based_deduplication = true
-#   kms_master_key_id           = "alias/housing-staging-cmk"
-#   kms_data_key_reuse_period_seconds = 300
-#   redrive_policy              = jsonencode({
-#     deadLetterTargetArn = aws_sqs_queue.activity_history_dead_letter_queue.arn,
-#     maxReceiveCount     = 3
-#   })
-# }
-# 
-# resource "aws_sqs_queue_policy" "activity_history_queue_policy" {
-#   queue_url = aws_sqs_queue.activity_history_queue.id
-#   policy = <<POLICY
-#   {
-#       "Version": "2012-10-17",
-#       "Id": "sqspolicy",
-#       "Statement": [
-#       {
-#           "Sid": "First",
-#           "Effect": "Allow",
-#           "Principal": "*",
-#           "Action": "sqs:SendMessage",
-#           "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
-#           "Condition": {
-#           "ArnEquals": {
-#               "aws:SourceArn": "${data.aws_ssm_parameter.person_sns_topic_arn.value}"
-#           }
-#           }
-#       }
-#       ]
-#   }
-#   POLICY
-# }
-# 
-# resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_person_sns" {
-#   topic_arn = data.aws_ssm_parameter.person_sns_topic_arn.value
-#   protocol  = "sqs"
-#   endpoint  = aws_sqs_queue.activity_history_queue.arn
-#   raw_message_delivery = true
-# }
-# 
-# resource "aws_ssm_parameter" "activityhistory_sqs_queue_arn" {
-#   name  = "/sqs-queue/staging/activityhistory/arn"
-#   type  = "String"
-#   value = aws_sqs_queue.activity_history_queue.arn
-# }
+data "aws_ssm_parameter" "person_sns_topic_arn" {
+  name = "/sns-topic/staging/person/arn"
+}
+
+resource "aws_sqs_queue" "activity_history_dead_letter_queue" {
+  name                        = "activityhistorydeadletterqueue.fifo"
+  fifo_queue                  = true
+  content_based_deduplication = true
+  kms_master_key_id           = "alias/housing-staging-cmk"
+  kms_data_key_reuse_period_seconds = 300
+}
+
+resource "aws_sqs_queue" "activity_history_queue" {
+  name                        = "activityhistoryqueue.fifo"
+  fifo_queue                  = true
+  content_based_deduplication = true
+  kms_master_key_id           = "alias/housing-staging-cmk"
+  kms_data_key_reuse_period_seconds = 300
+  redrive_policy              = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue.activity_history_dead_letter_queue.arn,
+    maxReceiveCount     = 3
+  })
+}
+
+resource "aws_sqs_queue_policy" "activity_history_queue_policy" {
+  queue_url = aws_sqs_queue.activity_history_queue.id
+  policy = <<POLICY
+  {
+      "Version": "2012-10-17",
+      "Id": "sqspolicy",
+      "Statement": [
+      {
+          "Sid": "First",
+          "Effect": "Allow",
+          "Principal": "*",
+          "Action": "sqs:SendMessage",
+          "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+          "Condition": {
+          "ArnEquals": {
+              "aws:SourceArn": "${data.aws_ssm_parameter.person_sns_topic_arn.value}"
+          }
+          }
+      }
+      ]
+  }
+  POLICY
+}
+
+resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_person_sns" {
+  topic_arn = data.aws_ssm_parameter.person_sns_topic_arn.value
+  protocol  = "sqs"
+  endpoint  = aws_sqs_queue.activity_history_queue.arn
+  raw_message_delivery = true
+}
+
+resource "aws_ssm_parameter" "activity_history_sqs_queue_arn" {
+  name  = "/sqs-queue/staging/activityhistory/arn"
+  type  = "String"
+  value = aws_sqs_queue.activity_history_queue.arn
+}
