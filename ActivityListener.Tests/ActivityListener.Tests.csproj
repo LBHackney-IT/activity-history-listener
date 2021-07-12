@@ -46,9 +46,7 @@
     
   <ItemGroup>
     <Folder Include="Domain\" />
-    <Folder Include="E2ETests\Stories\" />
     <Folder Include="Factories\" />
     <Folder Include="Infrastructure\" />
-    <Folder Include="UseCase\" />
   </ItemGroup>
 </Project>

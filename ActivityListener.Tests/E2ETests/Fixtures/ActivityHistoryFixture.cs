@@ -1,17 +1,14 @@
+using ActivityListener.Infrastructure;
 using Amazon.DynamoDBv2.DataModel;
-using AutoFixture;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using ActivityListener.Infrastructure;
 
 namespace ActivityListener.Tests.E2ETests.Fixtures
 {
     public class ActivityHistoryFixture : IDisposable
     {
-        private readonly Fixture _fixture = new Fixture();
-
         private readonly IDynamoDBContext _dbContext;
+        public List<ActivityHistoryDB> ToDelete { get; } = new List<ActivityHistoryDB>();
 
 
         public ActivityHistoryFixture(IDynamoDBContext dbContext)
@@ -30,6 +27,9 @@ namespace ActivityListener.Tests.E2ETests.Fixtures
         {
             if (disposing && !_disposed)
             {
+                foreach (var obj in ToDelete)
+                    _dbContext.DeleteAsync(obj).GetAwaiter().GetResult();
+
                 _disposed = true;
             }
         }

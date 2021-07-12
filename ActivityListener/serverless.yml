@@ -19,8 +19,8 @@ functions:
     name: ${self:service}-${self:provider.stage}
     handler: ActivityListener::ActivityListener.SqsFunction::FunctionHandler
     role: lambdaExecutionRole
-    #events:
-    #  - sqs: ${ssm:/sqs-queue/${self:provider.stage}/activityhistory/arn} 
+    events:
+      - sqs: ${ssm:/sqs-queue/${self:provider.stage}/activity-history/arn} 
       
 resources:
   Resources:

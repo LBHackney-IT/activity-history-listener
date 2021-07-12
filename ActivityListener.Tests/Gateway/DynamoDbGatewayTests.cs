@@ -11,6 +11,7 @@ using ActivityListener.Factories;
 using ActivityListener.Gateway;
 using ActivityListener.Infrastructure;
 using Xunit;
+using ActivityListener.Domain;
 
 namespace ActivityListener.Tests.Gateway
 {
@@ -55,76 +56,51 @@ namespace ActivityListener.Tests.Gateway
             }
         }
 
-        //private async Task InsertDatatoDynamoDB(TenureInformation entity)
-        //{
-        //    await DynamoDb.SaveAsync(entity.ToDatabase()).ConfigureAwait(false);
-        //    _cleanup.Add(async () => await DynamoDb.DeleteAsync<TenureInformationDb>(entity.Id).ConfigureAwait(false));
-        //}
+        private ActivityHistoryEntity ConstructDomainObject(object oldData = null, object newData = null)
+        {
+            oldData = oldData ?? new Dictionary<string, object>();
+            newData = newData ?? new Dictionary<string, object>();
+            return _fixture.Build<ActivityHistoryEntity>()
+                           .With(x => x.CreatedAt, DateTime.UtcNow)
+                           .With(x => x.OldData, oldData)
+                           .With(x => x.NewData, newData)
+                           .Create();
+        }
 
-        //private TenureInformation ConstructTenureInformation(bool nullTenuredAssetType = false)
-        //{
-        //    var entity = _fixture.Build<TenureInformation>()
-        //                         .With(x => x.EndOfTenureDate, DateTime.UtcNow)
-        //                         .With(x => x.StartOfTenureDate, DateTime.UtcNow)
-        //                         .With(x => x.SuccessionDate, DateTime.UtcNow)
-        //                         .With(x => x.PotentialEndDate, DateTime.UtcNow)
-        //                         .With(x => x.SubletEndDate, DateTime.UtcNow)
-        //                         .With(x => x.EvictionDate, DateTime.UtcNow)
-        //                         .With(x => x.VersionNumber, (int?) null)
-        //                         .Create();
+        [Fact]
+        public async Task SaveAsyncUpdatesDatabase()
+        {
+            var domain = ConstructDomainObject();
 
-        //    if (nullTenuredAssetType)
-        //        entity.TenuredAsset.Type = null;
+            await _classUnderTest.SaveAsync(domain).ConfigureAwait(false);
 
-        //    return entity;
-        //}
+            var savedInDB = await DynamoDb.LoadAsync<ActivityHistoryDB>(domain.TargetId, domain.Id).ConfigureAwait(false);
+            savedInDB.Should().BeEquivalentTo(domain.ToDatabase());
 
-        //[Fact]
-        //public async Task GetTenureInfoByIdAsyncReturnsNullIfEntityDoesntExist()
-        //{
-        //    var id = Guid.NewGuid();
-        //    var response = await _classUnderTest.GetTenureInfoByIdAsync(id).ConfigureAwait(false);
+            _logger.VerifyExact(LogLevel.Debug,
+                                $"Calling IDynamoDBContext.SaveAsync for target id {domain.TargetId}, id {domain.Id}",
+                                Times.Once());
 
-        //    response.Should().BeNull();
-        //    _logger.VerifyExact(LogLevel.Debug, $"Calling IDynamoDBContext.LoadAsync for id {id}", Times.Once());
-        //}
+            await DynamoDb.DeleteAsync(savedInDB).ConfigureAwait(false);
+        }
 
-        //[Theory]
-        //[InlineData(false)]
-        //[InlineData(true)]
-        //public async Task GetTenureInfoByIdAsyncReturnsTheEntityIfItExists(bool nullTenuredAssetType)
-        //{
-        //    var tenure = ConstructTenureInformation(nullTenuredAssetType);
-        //    await InsertDatatoDynamoDB(tenure).ConfigureAwait(false);
+        [Fact]
+        public void SaveAsyncExceptionThrown()
+        {
+            var domain = ConstructDomainObject();
+            var mockDynamoDb = new Mock<IDynamoDBContext>();
+            var exMsg = "Some exception";
+            mockDynamoDb.Setup(x => x.SaveAsync<ActivityHistoryDB>(It.IsAny<ActivityHistoryDB>(), default))
+                        .ThrowsAsync(new Exception(exMsg));
 
-        //    var response = await _classUnderTest.GetTenureInfoByIdAsync(tenure.Id).ConfigureAwait(false);
+            var classUnderTest = new DynamoDbGateway(mockDynamoDb.Object, _logger.Object);
+            Func<Task> func = async () => await classUnderTest.SaveAsync(domain).ConfigureAwait(false);
 
-        //    response.Should().BeEquivalentTo(tenure, (e) => e.Excluding(y => y.VersionNumber));
-        //    _logger.VerifyExact(LogLevel.Debug, $"Calling IDynamoDBContext.LoadAsync for id {tenure.Id}", Times.Once());
-        //}
+            func.Should().ThrowAsync<Exception>().WithMessage(exMsg);
 
-        //[Theory]
-        //[InlineData(false)]
-        //[InlineData(true)]
-        //public async Task UpdateTenureInfoAsyncUpdatesDatabase(bool nullTenuredAssetType)
-        //{
-        //    var tenure = ConstructTenureInformation(nullTenuredAssetType);
-        //    await InsertDatatoDynamoDB(tenure).ConfigureAwait(false);
-
-        //    tenure.HouseholdMembers = _fixture.CreateMany<HouseholdMembers>(5);
-        //    tenure.AccountType = _fixture.Create<AccountType>();
-        //    tenure.IsMutualExchange = !tenure.IsMutualExchange;
-        //    tenure.IsSublet = !tenure.IsSublet;
-        //    tenure.RentCostCentre = "Some new cost centre";
-        //    tenure.VersionNumber = 0; // This will have been set when injecting the inital record.
-
-        //    await _classUnderTest.UpdateTenureInfoAsync(tenure).ConfigureAwait(false);
-
-        //    var updatedInDB = await DynamoDb.LoadAsync<TenureInformationDb>(tenure.Id).ConfigureAwait(false);
-        //    updatedInDB.ToDomain().Should().BeEquivalentTo(tenure, (e) => e.Excluding(y => y.VersionNumber));
-        //    updatedInDB.VersionNumber.Should().Be(tenure.VersionNumber + 1);
-
-        //    _logger.VerifyExact(LogLevel.Debug, $"Calling IDynamoDBContext.SaveAsync for id {tenure.Id}", Times.Once());
-        //}
+            _logger.VerifyExact(LogLevel.Debug,
+                                $"Calling IDynamoDBContext.SaveAsync for target id {domain.TargetId}, id {domain.Id}",
+                                Times.Once());
+        }
     }
 }

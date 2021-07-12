@@ -1,5 +1,6 @@
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.Model;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -18,11 +19,24 @@ namespace ActivityListener.Tests
         {
             new TableDef
             {
-                Name = "ActvityHistory",
+                Name = "ActivityHistory",
                 KeyName = "targetId",
                 KeyType = ScalarAttributeType.S,
                 RangeKeyName = "id",
-                RangeKeyType = ScalarAttributeType.S
+                RangeKeyType = ScalarAttributeType.S,
+                LocalSecondaryIndexes = new List<LocalSecondaryIndex>(new[]
+                {
+                    new LocalSecondaryIndex
+                    {
+                        IndexName = "ActivityHistoryByCreatedAt",
+                        KeySchema = new List<KeySchemaElement>(new[]
+                        {
+                            new KeySchemaElement("targetId", KeyType.HASH),
+                            new KeySchemaElement("createdAt", KeyType.RANGE)
+                        }),
+                        Projection = new Projection { ProjectionType = ProjectionType.ALL }
+                    }
+                })
             }
         };
 
@@ -71,6 +85,7 @@ namespace ActivityListener.Tests
         public ScalarAttributeType KeyType { get; set; }
         public string RangeKeyName { get; set; }
         public ScalarAttributeType RangeKeyType { get; set; }
+        public List<LocalSecondaryIndex> LocalSecondaryIndexes { get; set; } = new List<LocalSecondaryIndex>();
     }
 
     [CollectionDefinition("Aws collection", DisableParallelization = true)]
