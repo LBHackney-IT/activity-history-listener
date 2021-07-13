@@ -42,6 +42,10 @@ data "aws_ssm_parameter" "person_sns_topic_arn" {
   name = "/sns-topic/production/person/arn"
 }
 
+data "aws_ssm_parameter" "contact_details_sns_topic_arn" {
+  name = "/sns-topic/production/contact_details/arn"
+}
+
 resource "aws_sqs_queue" "activity_history_dead_letter_queue" {
   name                        = "activityhistorydeadletterqueue.fifo"
   fifo_queue                  = true
@@ -69,18 +73,30 @@ resource "aws_sqs_queue_policy" "activity_history_queue_policy" {
       "Version": "2012-10-17",
       "Id": "sqspolicy",
       "Statement": [
-      {
-          "Sid": "First",
-          "Effect": "Allow",
-          "Principal": "*",
-          "Action": "sqs:SendMessage",
-          "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
-          "Condition": {
-          "ArnEquals": {
-              "aws:SourceArn": "${data.aws_ssm_parameter.person_sns_topic_arn.value}"
+          {
+              "Sid": "First",
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": "sqs:SendMessage",
+              "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+              "Condition": {
+                  "ArnEquals": {
+                      "aws:SourceArn": "${data.aws_ssm_parameter.person_sns_topic_arn.value}"
+                  }
+              }
+          },
+          {
+              "Sid": "Second",
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": "sqs:SendMessage",
+              "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+              "Condition": {
+                  "ArnEquals": {
+                      "aws:SourceArn": "${data.aws_ssm_parameter.contact_details_sns_topic_arn.value}"
+                  }
+              }
           }
-          }
-      }
       ]
   }
   POLICY
@@ -88,6 +104,13 @@ resource "aws_sqs_queue_policy" "activity_history_queue_policy" {
 
 resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_person_sns" {
   topic_arn = data.aws_ssm_parameter.person_sns_topic_arn.value
+  protocol  = "sqs"
+  endpoint  = aws_sqs_queue.activity_history_queue.arn
+  raw_message_delivery = true
+}
+
+resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_contact_details_sns" {
+  topic_arn = data.aws_ssm_parameter.contact_details_sns_topic_arn.value
   protocol  = "sqs"
   endpoint  = aws_sqs_queue.activity_history_queue.arn
   raw_message_delivery = true
