@@ -56,17 +56,18 @@ namespace ActivityListener.Tests.UseCase
             func.Should().ThrowAsync<Exception>().WithMessage(exMessage);
         }
 
-        //[Fact]
-        //public async Task ProcessMessageAsyncTestGatewayCalledSuccessfully()
-        //{
-        //    await _sut.ProcessMessageAsync(_eventSns).ConfigureAwait(false);
-        //    Func<ActivityHistoryEntity, bool> VerifyDomainObject = (ahe) =>
-        //    {
-        //        ahe.Should().BeEquivalentTo(_eventSns.ToDomain());
-        //        return true;
-        //    };
-        //    _mockGateway.Verify(x => x.SaveAsync(It.Is<ActivityHistoryEntity>(y => VerifyDomainObject(y))),
-        //                        Times.Once);
-        //}
+        [Fact]
+        public async Task ProcessMessageAsyncTestGatewayCalledSuccessfully()
+        {
+            await _sut.ProcessMessageAsync(_eventSns).ConfigureAwait(false);
+            Func<ActivityHistoryEntity, bool> VerifyDomainObject = (ahe) =>
+            {
+                ahe.Should().BeEquivalentTo(_eventSns.ToDomain(), config => config.Excluding(x => x.Id));
+                ahe.Id.Should().NotBeEmpty();
+                return true;
+            };
+            _mockGateway.Verify(x => x.SaveAsync(It.Is<ActivityHistoryEntity>(y => VerifyDomainObject(y))),
+                                Times.Once);
+        }
     }
 }

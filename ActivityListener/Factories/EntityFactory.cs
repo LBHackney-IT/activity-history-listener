@@ -79,8 +79,8 @@ namespace ActivityListener.Factories
                 TargetId = eventSns.EntityId,
                 CreatedAt = eventSns.DateTime,
                 TimetoLiveForRecord = default,
-                OldData = /*(Dictionary<string, object>)*/eventSns.EventData.OldData,
-                NewData = /*(Dictionary<string, object>)*/ eventSns.EventData.NewData,
+                OldData = eventSns.EventData.OldData,
+                NewData = eventSns.EventData.NewData,
                 AuthorDetails = eventSns.GetAuthorDetails()
             };
         }
