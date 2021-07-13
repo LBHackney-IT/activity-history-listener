@@ -7,7 +7,8 @@ namespace ActivityListener.Domain
     {
         person,
         asset,
-        tenure
+        tenure,
+        contactDetails
     }
 
     [JsonConverter(typeof(JsonStringEnumConverter))]

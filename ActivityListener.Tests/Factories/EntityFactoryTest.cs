@@ -84,9 +84,11 @@ namespace ActivityListener.Tests.Factories
             {
                 case EventTypes.PersonCreatedEvent:
                 case EventTypes.PersonUpdatedEvent:
+                    eventSns.GetTargetType().Should().Be(TargetType.person);
+                    break;
                 case EventTypes.ContactDetailAddedEvent:
                 case EventTypes.ContactDetailDeletedEvent:
-                    eventSns.GetTargetType().Should().Be(TargetType.person);
+                    eventSns.GetTargetType().Should().Be(TargetType.contactDetails);
                     break;
                 default:
                     {

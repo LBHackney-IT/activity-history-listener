@@ -48,9 +48,10 @@ namespace ActivityListener.Factories
             {
                 case EventTypes.PersonCreatedEvent:
                 case EventTypes.PersonUpdatedEvent:
+                    return TargetType.person;
                 case EventTypes.ContactDetailAddedEvent:
                 case EventTypes.ContactDetailDeletedEvent:
-                    return TargetType.person;
+                    return TargetType.contactDetails;
 
                 default:
                     throw new ArgumentException($"Unknown event type: {eventSns.EventType}");
