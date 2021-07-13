@@ -74,18 +74,30 @@ resource "aws_sqs_queue_policy" "activity_history_queue_policy" {
       "Version": "2012-10-17",
       "Id": "sqspolicy",
       "Statement": [
-      {
-          "Sid": "First",
-          "Effect": "Allow",
-          "Principal": "*",
-          "Action": "sqs:SendMessage",
-          "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
-          "Condition": {
-          "ArnEquals": {
-              "aws:SourceArn": "${data.aws_ssm_parameter.person_sns_topic_arn.value}"
+          {
+              "Sid": "First",
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": "sqs:SendMessage",
+              "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+              "Condition": {
+                  "ArnEquals": {
+                      "aws:SourceArn": "${data.aws_ssm_parameter.person_sns_topic_arn.value}"
+                  }
+              }
+          },
+          {
+              "Sid": "Second",
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": "sqs:SendMessage",
+              "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+              "Condition": {
+                  "ArnEquals": {
+                      "aws:SourceArn": "${data.aws_ssm_parameter.contact_details_sns_topic_arn.value}"
+                  }
+              }
           }
-          }
-      }
       ]
   }
   POLICY
