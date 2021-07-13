@@ -15,6 +15,7 @@ namespace ActivityListener.Domain
     {
         create,
         update,
-        delete
+        delete,
+        migrate
     }
 }

@@ -18,7 +18,9 @@ namespace ActivityListener.Tests.Factories
             var allEvents = new[]
             {
                 EventTypes.PersonCreatedEvent,
-                EventTypes.PersonUpdatedEvent
+                EventTypes.PersonUpdatedEvent,
+                EventTypes.ContactDetailAddedEvent,
+                EventTypes.ContactDetailDeletedEvent
             };
             foreach (var type in allEvents)
             {
@@ -37,6 +39,7 @@ namespace ActivityListener.Tests.Factories
             entity.AuthorDetails.Should().Be(databaseEntity.AuthorDetails);
             entity.NewData.Should().BeEquivalentTo(databaseEntity.NewData);
             entity.OldData.Should().BeEquivalentTo(databaseEntity.OldData);
+            entity.SourceDomain.Should().Be(databaseEntity.SourceDomain);
             entity.TargetId.Should().Be(databaseEntity.TargetId);
             entity.TargetType.Should().Be(databaseEntity.TargetType);
             entity.TimetoLiveForRecord.Should().Be(databaseEntity.TimetoLiveForRecord);
@@ -45,16 +48,21 @@ namespace ActivityListener.Tests.Factories
 
         [Theory]
         [MemberData(nameof(AllEventTypes))]
+        [InlineData("invalid")]
         public void CanGetTheActivityTypeFromAnEvent(string eventType)
         {
             var eventSns = new EntityEventSns() { EventType = eventType };
             switch (eventType)
             {
                 case EventTypes.PersonCreatedEvent:
+                case EventTypes.ContactDetailAddedEvent:
                     eventSns.GetActivityType().Should().Be(ActivityType.create);
                     break;
                 case EventTypes.PersonUpdatedEvent:
                     eventSns.GetActivityType().Should().Be(ActivityType.update);
+                    break;
+                case EventTypes.ContactDetailDeletedEvent:
+                    eventSns.GetActivityType().Should().Be(ActivityType.delete);
                     break;
                 default:
                     {
@@ -68,6 +76,7 @@ namespace ActivityListener.Tests.Factories
 
         [Theory]
         [MemberData(nameof(AllEventTypes))]
+        [InlineData("invalid")]
         public void CanGetTheTargetTypeFromAnEvent(string eventType)
         {
             var eventSns = new EntityEventSns() { EventType = eventType };
@@ -75,6 +84,8 @@ namespace ActivityListener.Tests.Factories
             {
                 case EventTypes.PersonCreatedEvent:
                 case EventTypes.PersonUpdatedEvent:
+                case EventTypes.ContactDetailAddedEvent:
+                case EventTypes.ContactDetailDeletedEvent:
                     eventSns.GetTargetType().Should().Be(TargetType.person);
                     break;
                 default:

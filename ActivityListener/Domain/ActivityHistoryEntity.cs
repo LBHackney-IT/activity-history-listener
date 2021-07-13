@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace ActivityListener.Domain
 {
@@ -9,6 +8,8 @@ namespace ActivityListener.Domain
 
         public ActivityType Type { get; set; }
 
+        public string SourceDomain { get; set; }
+
         public TargetType TargetType { get; set; }
 
         public Guid TargetId { get; set; }
@@ -17,9 +18,9 @@ namespace ActivityListener.Domain
 
         public int TimetoLiveForRecord { get; set; }
 
-        public /*Dictionary<string, object>*/ object OldData { get; set; }
+        public object OldData { get; set; }
 
-        public /*Dictionary<string, object>*/ object NewData { get; set; }
+        public object NewData { get; set; }
 
         public AuthorDetails AuthorDetails { get; set; }
     }

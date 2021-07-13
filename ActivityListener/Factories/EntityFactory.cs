@@ -15,6 +15,7 @@ namespace ActivityListener.Factories
                 Id = entity.Id,
                 CreatedAt = entity.CreatedAt,
                 Type = entity.Type,
+                SourceDomain = entity.SourceDomain,
                 OldData = entity.OldData,
                 TimetoLiveForRecord = entity.TimetoLiveForRecord,
                 TargetType = entity.TargetType,
@@ -29,9 +30,12 @@ namespace ActivityListener.Factories
             switch (eventSns.EventType)
             {
                 case EventTypes.PersonCreatedEvent:
+                case EventTypes.ContactDetailAddedEvent:
                     return ActivityType.create;
                 case EventTypes.PersonUpdatedEvent:
                     return ActivityType.update;
+                case EventTypes.ContactDetailDeletedEvent:
+                    return ActivityType.delete;
 
                 default:
                     throw new ArgumentException($"Unknown event type: {eventSns.EventType}");
@@ -42,10 +46,10 @@ namespace ActivityListener.Factories
         {
             switch (eventSns.EventType)
             {
-                // TODO - should we do it this way or can we assume that the
-                // SourceDomain (as lower camel case) value will equal the target type?
                 case EventTypes.PersonCreatedEvent:
                 case EventTypes.PersonUpdatedEvent:
+                case EventTypes.ContactDetailAddedEvent:
+                case EventTypes.ContactDetailDeletedEvent:
                     return TargetType.person;
 
                 default:
@@ -69,10 +73,11 @@ namespace ActivityListener.Factories
             {
                 Id = Guid.NewGuid(),
                 Type = eventSns.GetActivityType(),
+                SourceDomain = eventSns.SourceDomain,
                 TargetType = eventSns.GetTargetType(),
                 TargetId = eventSns.EntityId,
                 CreatedAt = eventSns.DateTime,
-                //TimetoLiveForRecord = ???,
+                TimetoLiveForRecord = default,
                 OldData = /*(Dictionary<string, object>)*/eventSns.EventData.OldData,
                 NewData = /*(Dictionary<string, object>)*/ eventSns.EventData.NewData,
                 AuthorDetails = eventSns.GetAuthorDetails()

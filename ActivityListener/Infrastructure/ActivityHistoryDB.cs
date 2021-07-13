@@ -15,6 +15,7 @@ namespace ActivityListener.Infrastructure
         [DynamoDBHashKey]
         public Guid TargetId { get; set; }
 
+        public string SourceDomain { get; set; }
 
         [DynamoDBProperty(Converter = typeof(DynamoDbEnumConverter<ActivityType>))]
         public ActivityType Type { get; set; }
@@ -28,10 +29,10 @@ namespace ActivityListener.Infrastructure
         public int TimetoLiveForRecord { get; set; }
 
         [DynamoDBProperty(Converter = typeof(DynamoDbObjectConverter<Dictionary<string, object>>))]
-        public /*Dictionary<string, object>*/ object OldData { get; set; }
+        public object OldData { get; set; }
 
         [DynamoDBProperty(Converter = typeof(DynamoDbObjectConverter<Dictionary<string, object>>))]
-        public /*Dictionary<string, object>*/ object NewData { get; set; }
+        public object NewData { get; set; }
 
         [DynamoDBProperty(Converter = typeof(DynamoDbObjectConverter<AuthorDetails>))]
         public AuthorDetails AuthorDetails { get; set; }
