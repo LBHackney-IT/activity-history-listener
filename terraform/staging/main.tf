@@ -94,7 +94,7 @@ resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_perso
 }
 
 resource "aws_ssm_parameter" "activity_history_sqs_queue_arn" {
-  name  = "/sqs-queue/staging/activityhistory/arn"
+  name  = "/sqs-queue/staging/activity-history/arn"
   type  = "String"
   value = aws_sqs_queue.activity_history_queue.arn
 }

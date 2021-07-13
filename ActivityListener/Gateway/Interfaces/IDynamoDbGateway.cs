@@ -1,10 +1,10 @@
-using System;
+using ActivityListener.Domain;
 using System.Threading.Tasks;
-//using ActivityListener.Domain;
 
 namespace ActivityListener.Gateway.Interfaces
 {
     public interface IDynamoDbGateway
     {
+        Task SaveAsync(ActivityHistoryEntity activityHistory);
     }
 }

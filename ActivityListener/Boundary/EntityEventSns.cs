@@ -21,5 +21,14 @@ namespace ActivityListener.Boundary
         public User User { get; set; }
 
         public Guid EntityId { get; set; }
+
+        public EventData EventData { get; set; } = new EventData();
+    }
+
+    public class EventData
+    {
+        public object OldData { get; set; }
+
+        public object NewData { get; set; }
     }
 }

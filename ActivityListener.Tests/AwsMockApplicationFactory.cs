@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ActivityListener.Tests
 {
@@ -48,10 +49,18 @@ namespace ActivityListener.Tests
                         attributes.Add(new AttributeDefinition(table.RangeKeyName, table.RangeKeyType));
                     }
 
+                    var indexRangeKey = table.LocalSecondaryIndexes.SelectMany(x => x.KeySchema).FirstOrDefault(y => y.KeyType == KeyType.RANGE);
+                    if (null != indexRangeKey)
+                        attributes.Add(new AttributeDefinition(indexRangeKey.AttributeName, ScalarAttributeType.S)); // Assume a string for now.
+
                     var request = new CreateTableRequest(table.Name,
                         keySchema,
                         attributes,
-                        new ProvisionedThroughput(3, 3));
+                        new ProvisionedThroughput(3, 3))
+                    {
+                        LocalSecondaryIndexes = table.LocalSecondaryIndexes
+                    };
+
                     _ = dynamoDb.CreateTableAsync(request).GetAwaiter().GetResult();
                 }
                 catch (ResourceInUseException)

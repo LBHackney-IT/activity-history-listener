@@ -1,3 +1,8 @@
+using ActivityListener.Boundary;
+using ActivityListener.Gateway;
+using ActivityListener.Gateway.Interfaces;
+using ActivityListener.UseCase;
+using ActivityListener.UseCase.Interfaces;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.SQSEvents;
 using Hackney.Core.DynamoDb;
@@ -9,11 +14,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using ActivityListener.Boundary;
-using ActivityListener.Gateway;
-using ActivityListener.Gateway.Interfaces;
-using ActivityListener.UseCase;
-using ActivityListener.UseCase.Interfaces;
 
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
@@ -51,7 +51,7 @@ namespace ActivityListener
             services.ConfigureDynamoDB();
 
             services.AddHttpClient();
-            //services.AddScoped<IUpdatePersonDetailsOnTenure, UpdatePersonDetailsOnTenure>();
+            services.AddScoped<IMessageProcessing, MessageProcessor>();
 
             services.AddScoped<IDynamoDbGateway, DynamoDbGateway>();
 
@@ -86,24 +86,8 @@ namespace ActivityListener
             {
                 try
                 {
-                    //IMessageProcessing processor = null;
-                    switch (entityEvent.EventType)
-                    {
-                        case EventTypes.PersonCreatedEvent:
-                            {
-                                //processor = ServiceProvider.GetService<IAddNewPersonToTenure>();
-                                break;
-                            }
-                        case EventTypes.PersonUpdatedEvent:
-                            {
-                                //processor = ServiceProvider.GetService<IUpdatePersonDetailsOnTenure>();
-                                break;
-                            }
-                        default:
-                            throw new ArgumentException($"Unknown event type: {entityEvent.EventType} on message id: {message.MessageId}");
-                    }
-
-                    //await processor.ProcessMessageAsync(entityEvent).ConfigureAwait(false);
+                    IMessageProcessing processor = ServiceProvider.GetService<IMessageProcessing>();
+                    await processor.ProcessMessageAsync(entityEvent).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -111,8 +95,6 @@ namespace ActivityListener
                     throw; // AWS will handle retry/moving to the dead letter queue
                 }
             }
-            // TODO - Remove this once implemented.
-            await Task.CompletedTask;
         }
     }
 }
