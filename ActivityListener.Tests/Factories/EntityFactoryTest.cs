@@ -105,7 +105,6 @@ namespace ActivityListener.Tests.Factories
         {
             var eventSns = _fixture.Create<EntityEventSns>();
             var ad = eventSns.GetAuthorDetails();
-            ad.Id.Should().Be(eventSns.User.Id.ToString());
             ad.Email.Should().Be(eventSns.User.Email);
             ad.FullName.Should().Be(eventSns.User.Name);
         }
