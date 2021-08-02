@@ -62,7 +62,6 @@ namespace ActivityListener.Factories
         {
             return new AuthorDetails
             {
-                Id = eventSns.User.Id.ToString(),
                 Email = eventSns.User.Email,
                 FullName = eventSns.User.Name
             };
