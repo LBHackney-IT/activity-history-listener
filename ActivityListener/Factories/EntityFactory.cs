@@ -2,7 +2,6 @@ using ActivityListener.Boundary;
 using ActivityListener.Domain;
 using ActivityListener.Infrastructure;
 using System;
-using System.Collections.Generic;
 
 namespace ActivityListener.Factories
 {
@@ -31,6 +30,7 @@ namespace ActivityListener.Factories
             {
                 case EventTypes.PersonCreatedEvent:
                 case EventTypes.ContactDetailAddedEvent:
+                case EventTypes.TenureCreatedEvent:
                     return ActivityType.create;
                 case EventTypes.PersonUpdatedEvent:
                     return ActivityType.update;
@@ -52,6 +52,8 @@ namespace ActivityListener.Factories
                 case EventTypes.ContactDetailAddedEvent:
                 case EventTypes.ContactDetailDeletedEvent:
                     return TargetType.contactDetails;
+                case EventTypes.TenureCreatedEvent:
+                    return TargetType.tenure;
 
                 default:
                     throw new ArgumentException($"Unknown event type: {eventSns.EventType}");

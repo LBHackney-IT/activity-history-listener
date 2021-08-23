@@ -9,12 +9,10 @@ using Amazon.Lambda.TestUtilities;
 using AutoFixture;
 using FluentAssertions;
 using Moq;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -42,10 +40,6 @@ namespace ActivityListener.Tests.E2ETests.Steps
                            .Create();
         }
 
-        public void GivenAnEntityActivityEvent()
-        {
-            GivenAnEntityActivityEvent(EventTypes.PersonUpdatedEvent);
-        }
         public void GivenAnEntityActivityEvent(string eventType)
         {
             var eventData = new EventData()

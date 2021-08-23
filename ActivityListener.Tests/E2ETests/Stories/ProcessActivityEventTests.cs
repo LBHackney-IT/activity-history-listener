@@ -2,7 +2,6 @@ using ActivityListener.Tests.E2ETests.Fixtures;
 using ActivityListener.Tests.E2ETests.Steps;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using TestStack.BDDfy;
 using Xunit;
 
@@ -43,6 +42,14 @@ namespace ActivityListener.Tests.E2ETests.Stories
             }
         }
 
+        public static IEnumerable<object[]> AllEventTypes()
+        {
+            foreach (var type in EventTypeHelper.AllEventTypes)
+            {
+                yield return new object[] { type };
+            }
+        }
+
         [Fact]
         public void UnknownEventTypeThrows()
         {
@@ -52,10 +59,11 @@ namespace ActivityListener.Tests.E2ETests.Stories
                 .BDDfy();
         }
 
-        [Fact]
-        public void EventCreatesActivityHistoryRecord()
+        [Theory]
+        [MemberData(nameof(AllEventTypes))]
+        public void EventCreatesActivityHistoryRecord(string eventType)
         {
-            this.Given(g => _steps.GivenAnEntityActivityEvent())
+            this.Given(g => _steps.GivenAnEntityActivityEvent(eventType))
                 .When(w => _steps.WhenTheFunctionIsTriggered(_steps.EventSns))
                 .Then(t => _steps.ThenAnActivityHistoryRecordIsCreatedAsync(_dbFixture.DynamoDbContext, _steps.EventSns))
                 .BDDfy();
