@@ -7,5 +7,7 @@ namespace ActivityListener
 
         public const string ContactDetailAddedEvent = "ContactDetailAddedEvent";
         public const string ContactDetailDeletedEvent = "ContactDetailDeletedEvent";
+
+        public const string TenureCreatedEvent = "TenureCreatedEvent";
     }
 }

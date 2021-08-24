@@ -46,6 +46,10 @@ data "aws_ssm_parameter" "contact_details_sns_topic_arn" {
   name = "/sns-topic/production/contact_details/arn"
 }
 
+data "aws_ssm_parameter" "tenure_sns_topic_arn" {
+  name = "/sns-topic/production/tenure/arn"
+}
+
 resource "aws_sqs_queue" "activity_history_dead_letter_queue" {
   name                        = "activityhistorydeadletterqueue.fifo"
   fifo_queue                  = true
@@ -96,6 +100,18 @@ resource "aws_sqs_queue_policy" "activity_history_queue_policy" {
                       "aws:SourceArn": "${data.aws_ssm_parameter.contact_details_sns_topic_arn.value}"
                   }
               }
+          },
+          {
+              "Sid": "Third",
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": "sqs:SendMessage",
+              "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+              "Condition": {
+                  "ArnEquals": {
+                      "aws:SourceArn": "${data.aws_ssm_parameter.tenure_sns_topic_arn.value}"
+                  }
+              }
           }
       ]
   }
@@ -111,6 +127,13 @@ resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_perso
 
 resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_contact_details_sns" {
   topic_arn = data.aws_ssm_parameter.contact_details_sns_topic_arn.value
+  protocol  = "sqs"
+  endpoint  = aws_sqs_queue.activity_history_queue.arn
+  raw_message_delivery = true
+}
+
+resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_tenure_sns" {
+  topic_arn = data.aws_ssm_parameter.tenure_sns_topic_arn.value
   protocol  = "sqs"
   endpoint  = aws_sqs_queue.activity_history_queue.arn
   raw_message_delivery = true
