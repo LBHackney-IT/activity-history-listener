@@ -15,14 +15,7 @@ namespace ActivityListener.Tests.Factories
 
         public static IEnumerable<object[]> AllEventTypes()
         {
-            var allEvents = new[]
-            {
-                EventTypes.PersonCreatedEvent,
-                EventTypes.PersonUpdatedEvent,
-                EventTypes.ContactDetailAddedEvent,
-                EventTypes.ContactDetailDeletedEvent
-            };
-            foreach (var type in allEvents)
+            foreach (var type in EventTypeHelper.AllEventTypes)
             {
                 yield return new object[] { type };
             }
@@ -56,6 +49,7 @@ namespace ActivityListener.Tests.Factories
             {
                 case EventTypes.PersonCreatedEvent:
                 case EventTypes.ContactDetailAddedEvent:
+                case EventTypes.TenureCreatedEvent:
                     eventSns.GetActivityType().Should().Be(ActivityType.create);
                     break;
                 case EventTypes.PersonUpdatedEvent:
@@ -89,6 +83,9 @@ namespace ActivityListener.Tests.Factories
                 case EventTypes.ContactDetailAddedEvent:
                 case EventTypes.ContactDetailDeletedEvent:
                     eventSns.GetTargetType().Should().Be(TargetType.contactDetails);
+                    break;
+                case EventTypes.TenureCreatedEvent:
+                    eventSns.GetTargetType().Should().Be(TargetType.tenure);
                     break;
                 default:
                     {
