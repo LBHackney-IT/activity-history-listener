@@ -31,6 +31,7 @@ namespace ActivityListener.Factories
                 case EventTypes.PersonCreatedEvent:
                 case EventTypes.ContactDetailAddedEvent:
                 case EventTypes.TenureCreatedEvent:
+                case EventTypes.PersonAddedToTenureEvent:
                     return ActivityType.create;
                 case EventTypes.PersonUpdatedEvent:
                     return ActivityType.update;
@@ -54,6 +55,8 @@ namespace ActivityListener.Factories
                     return TargetType.contactDetails;
                 case EventTypes.TenureCreatedEvent:
                     return TargetType.tenure;
+                case EventTypes.PersonAddedToTenureEvent:
+                    return TargetType.tenurePerson;
 
                 default:
                     throw new ArgumentException($"Unknown event type: {eventSns.EventType}");
