@@ -34,6 +34,7 @@ namespace ActivityListener.Factories
                 case EventTypes.PersonAddedToTenureEvent:
                     return ActivityType.create;
                 case EventTypes.PersonUpdatedEvent:
+                case EventTypes.TenureUpdatedEvent:
                     return ActivityType.update;
                 case EventTypes.ContactDetailDeletedEvent:
                     return ActivityType.delete;
@@ -54,6 +55,7 @@ namespace ActivityListener.Factories
                 case EventTypes.ContactDetailDeletedEvent:
                     return TargetType.contactDetails;
                 case EventTypes.TenureCreatedEvent:
+                case EventTypes.TenureUpdatedEvent:
                     return TargetType.tenure;
                 case EventTypes.PersonAddedToTenureEvent:
                     return TargetType.tenurePerson;
