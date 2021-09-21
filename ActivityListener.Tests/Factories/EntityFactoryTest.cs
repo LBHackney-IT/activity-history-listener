@@ -50,9 +50,11 @@ namespace ActivityListener.Tests.Factories
                 case EventTypes.PersonCreatedEvent:
                 case EventTypes.ContactDetailAddedEvent:
                 case EventTypes.TenureCreatedEvent:
+                case EventTypes.PersonAddedToTenureEvent:
                     eventSns.GetActivityType().Should().Be(ActivityType.create);
                     break;
                 case EventTypes.PersonUpdatedEvent:
+                case EventTypes.TenureUpdatedEvent:
                     eventSns.GetActivityType().Should().Be(ActivityType.update);
                     break;
                 case EventTypes.ContactDetailDeletedEvent:
@@ -85,7 +87,11 @@ namespace ActivityListener.Tests.Factories
                     eventSns.GetTargetType().Should().Be(TargetType.contactDetails);
                     break;
                 case EventTypes.TenureCreatedEvent:
+                case EventTypes.TenureUpdatedEvent:
                     eventSns.GetTargetType().Should().Be(TargetType.tenure);
+                    break;
+                case EventTypes.PersonAddedToTenureEvent:
+                    eventSns.GetTargetType().Should().Be(TargetType.tenurePerson);
                     break;
                 default:
                     {
