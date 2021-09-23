@@ -6,6 +6,7 @@ namespace ActivityListener
         public const string PersonUpdatedEvent = "PersonUpdatedEvent";
 
         public const string PersonAddedToTenureEvent = "PersonAddedToTenureEvent";
+        public const string PersonRemovedFromTenureEvent = "PersonRemovedFromTenureEvent";
 
         public const string ContactDetailAddedEvent = "ContactDetailAddedEvent";
         public const string ContactDetailDeletedEvent = "ContactDetailDeletedEvent";
