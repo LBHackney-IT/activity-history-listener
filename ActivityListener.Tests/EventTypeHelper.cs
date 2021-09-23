@@ -11,7 +11,8 @@ namespace ActivityListener.Tests
                 EventTypes.ContactDetailDeletedEvent,
                 EventTypes.TenureCreatedEvent,
                 EventTypes.TenureUpdatedEvent,
-                EventTypes.PersonAddedToTenureEvent
+                EventTypes.PersonAddedToTenureEvent,
+                EventTypes.PersonRemovedFromTenureEvent
             };
     }
 }
