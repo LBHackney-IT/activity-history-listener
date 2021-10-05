@@ -58,6 +58,7 @@ namespace ActivityListener.Tests.Factories
                     eventSns.GetActivityType().Should().Be(ActivityType.update);
                     break;
                 case EventTypes.ContactDetailDeletedEvent:
+                case EventTypes.PersonRemovedFromTenureEvent:
                     eventSns.GetActivityType().Should().Be(ActivityType.delete);
                     break;
                 default:
@@ -91,6 +92,7 @@ namespace ActivityListener.Tests.Factories
                     eventSns.GetTargetType().Should().Be(TargetType.tenure);
                     break;
                 case EventTypes.PersonAddedToTenureEvent:
+                case EventTypes.PersonRemovedFromTenureEvent:
                     eventSns.GetTargetType().Should().Be(TargetType.tenurePerson);
                     break;
                 default:
