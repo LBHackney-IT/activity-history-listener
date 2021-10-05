@@ -37,6 +37,7 @@ namespace ActivityListener.Factories
                 case EventTypes.TenureUpdatedEvent:
                     return ActivityType.update;
                 case EventTypes.ContactDetailDeletedEvent:
+                case EventTypes.PersonRemovedFromTenureEvent:
                     return ActivityType.delete;
 
                 default:
@@ -58,6 +59,7 @@ namespace ActivityListener.Factories
                 case EventTypes.TenureUpdatedEvent:
                     return TargetType.tenure;
                 case EventTypes.PersonAddedToTenureEvent:
+                case EventTypes.PersonRemovedFromTenureEvent:
                     return TargetType.tenurePerson;
 
                 default:
