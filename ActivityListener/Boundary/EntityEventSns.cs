@@ -24,11 +24,4 @@ namespace ActivityListener.Boundary
 
         public EventData EventData { get; set; } = new EventData();
     }
-
-    public class EventData
-    {
-        public object OldData { get; set; }
-
-        public object NewData { get; set; }
-    }
 }
