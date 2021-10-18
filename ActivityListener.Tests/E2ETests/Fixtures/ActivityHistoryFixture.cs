@@ -1,5 +1,5 @@
-using ActivityListener.Infrastructure;
 using Amazon.DynamoDBv2.DataModel;
+using Hackney.Shared.ActivityHistory.Infrastructure;
 using System;
 using System.Collections.Generic;
 
@@ -9,7 +9,6 @@ namespace ActivityListener.Tests.E2ETests.Fixtures
     {
         private readonly IDynamoDBContext _dbContext;
         public List<ActivityHistoryDB> ToDelete { get; } = new List<ActivityHistoryDB>();
-
 
         public ActivityHistoryFixture(IDynamoDBContext dbContext)
         {
