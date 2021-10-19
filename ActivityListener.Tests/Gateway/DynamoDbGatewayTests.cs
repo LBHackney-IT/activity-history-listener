@@ -6,12 +6,11 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-//using ActivityListener.Domain;
-using ActivityListener.Factories;
 using ActivityListener.Gateway;
-using ActivityListener.Infrastructure;
 using Xunit;
-using ActivityListener.Domain;
+using Hackney.Shared.ActivityHistory.Domain;
+using Hackney.Shared.ActivityHistory.Infrastructure;
+using Hackney.Shared.ActivityHistory.Factories;
 
 namespace ActivityListener.Tests.Gateway
 {

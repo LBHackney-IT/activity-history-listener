@@ -1,8 +1,9 @@
 using ActivityListener.Boundary;
-using ActivityListener.Domain;
 using ActivityListener.Factories;
 using AutoFixture;
 using FluentAssertions;
+using Hackney.Shared.ActivityHistory.Domain;
+using Hackney.Shared.ActivityHistory.Factories;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -19,24 +20,6 @@ namespace ActivityListener.Tests.Factories
             {
                 yield return new object[] { type };
             }
-        }
-
-        [Fact]
-        public void CanMapADomainEntityToADatabaseObject()
-        {
-            var entity = _fixture.Create<ActivityHistoryEntity>();
-            var databaseEntity = entity.ToDatabase();
-
-            entity.Id.Should().Be(databaseEntity.Id);
-            entity.CreatedAt.Should().BeSameDateAs(databaseEntity.CreatedAt);
-            entity.AuthorDetails.Should().Be(databaseEntity.AuthorDetails);
-            entity.NewData.Should().BeEquivalentTo(databaseEntity.NewData);
-            entity.OldData.Should().BeEquivalentTo(databaseEntity.OldData);
-            entity.SourceDomain.Should().Be(databaseEntity.SourceDomain);
-            entity.TargetId.Should().Be(databaseEntity.TargetId);
-            entity.TargetType.Should().Be(databaseEntity.TargetType);
-            entity.TimetoLiveForRecord.Should().Be(databaseEntity.TimetoLiveForRecord);
-            entity.Type.Should().Be(databaseEntity.Type);
         }
 
         [Theory]

@@ -1,29 +1,12 @@
 using ActivityListener.Boundary;
-using ActivityListener.Domain;
-using ActivityListener.Infrastructure;
+using Hackney.Shared.ActivityHistory.Domain;
+using Hackney.Shared.ActivityHistory.Infrastructure;
 using System;
 
 namespace ActivityListener.Factories
 {
     public static class EntityFactory
     {
-        public static ActivityHistoryDB ToDatabase(this ActivityHistoryEntity entity)
-        {
-            return new ActivityHistoryDB
-            {
-                Id = entity.Id,
-                CreatedAt = entity.CreatedAt,
-                Type = entity.Type,
-                SourceDomain = entity.SourceDomain,
-                OldData = entity.OldData,
-                TimetoLiveForRecord = entity.TimetoLiveForRecord,
-                TargetType = entity.TargetType,
-                TargetId = entity.TargetId,
-                NewData = entity.NewData,
-                AuthorDetails = entity.AuthorDetails
-            };
-        }
-
         public static ActivityType GetActivityType(this EntityEventSns eventSns)
         {
             switch (eventSns.EventType)
