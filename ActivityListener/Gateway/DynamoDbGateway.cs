@@ -1,8 +1,8 @@
+using ActivityListener.Domain;
+using ActivityListener.Factories;
 using ActivityListener.Gateway.Interfaces;
 using Amazon.DynamoDBv2.DataModel;
 using Hackney.Core.Logging;
-using Hackney.Shared.ActivityHistory.Domain;
-using Hackney.Shared.ActivityHistory.Factories;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 

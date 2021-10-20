@@ -1,10 +1,10 @@
 using ActivityListener.Boundary;
+using ActivityListener.Domain;
 using ActivityListener.Factories;
 using ActivityListener.Gateway.Interfaces;
 using ActivityListener.UseCase;
 using AutoFixture;
 using FluentAssertions;
-using Hackney.Shared.ActivityHistory.Domain;
 using Moq;
 using System;
 using System.Threading.Tasks;

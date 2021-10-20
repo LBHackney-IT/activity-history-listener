@@ -1,5 +1,6 @@
 using ActivityListener.Boundary;
 using ActivityListener.Factories;
+using ActivityListener.Infrastructure;
 using ActivityListener.Tests.E2ETests.Fixtures;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.Lambda.Core;
@@ -7,8 +8,6 @@ using Amazon.Lambda.SQSEvents;
 using Amazon.Lambda.TestUtilities;
 using AutoFixture;
 using FluentAssertions;
-using Hackney.Shared.ActivityHistory.Factories;
-using Hackney.Shared.ActivityHistory.Infrastructure;
 using Moq;
 using Newtonsoft.Json.Linq;
 using System;

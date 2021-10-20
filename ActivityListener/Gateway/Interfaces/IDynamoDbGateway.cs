@@ -1,4 +1,4 @@
-using Hackney.Shared.ActivityHistory.Domain;
+using ActivityListener.Domain;
 using System.Threading.Tasks;
 
 namespace ActivityListener.Gateway.Interfaces
