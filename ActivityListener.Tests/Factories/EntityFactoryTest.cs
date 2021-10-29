@@ -3,7 +3,6 @@ using ActivityListener.Factories;
 using AutoFixture;
 using FluentAssertions;
 using Hackney.Shared.ActivityHistory.Domain;
-using Hackney.Shared.ActivityHistory.Factories;
 using System;
 using System.Collections.Generic;
 using Xunit;

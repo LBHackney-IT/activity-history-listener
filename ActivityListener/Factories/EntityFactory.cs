@@ -1,6 +1,5 @@
 using ActivityListener.Boundary;
 using Hackney.Shared.ActivityHistory.Domain;
-using Hackney.Shared.ActivityHistory.Infrastructure;
 using System;
 
 namespace ActivityListener.Factories
