@@ -12,7 +12,9 @@ namespace ActivityListener.Tests
                 EventTypes.TenureCreatedEvent,
                 EventTypes.TenureUpdatedEvent,
                 EventTypes.PersonAddedToTenureEvent,
-                EventTypes.PersonRemovedFromTenureEvent
+                EventTypes.PersonRemovedFromTenureEvent,
+                EventTypes.HousingApplicationCreatedEvent,
+                EventTypes.HousingApplicationUpdatedEvent,
             };
     }
 }

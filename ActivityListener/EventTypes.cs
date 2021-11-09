@@ -13,5 +13,8 @@ namespace ActivityListener
 
         public const string TenureCreatedEvent = "TenureCreatedEvent";
         public const string TenureUpdatedEvent = "TenureUpdatedEvent";
+
+        public const string HousingApplicationCreatedEvent = "HousingApplicationSubmittedEvent";
+        public const string HousingApplicationUpdatedEvent = "HousingApplicationUpdatedEvent";
     }
 }
