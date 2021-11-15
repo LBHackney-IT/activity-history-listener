@@ -16,5 +16,8 @@ namespace ActivityListener
 
         public const string HousingApplicationCreatedEvent = "HousingApplicationCreatedEvent";
         public const string HousingApplicationUpdatedEvent = "HousingApplicationUpdatedEvent";
+
+        public const string EqualityInformationCreatedEvent = "EqualityInformationCreatedEvent";
+        public const string EqualityInformationUpdatedEvent = "EqualityInformationUpdatedEvent";
     }
 }
