@@ -15,6 +15,8 @@ namespace ActivityListener.Tests
                 EventTypes.PersonRemovedFromTenureEvent,
                 EventTypes.HousingApplicationCreatedEvent,
                 EventTypes.HousingApplicationUpdatedEvent,
+                EventTypes.EqualityInformationCreatedEvent,
+                EventTypes.EqualityInformationUpdatedEvent
             };
     }
 }
