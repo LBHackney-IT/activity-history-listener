@@ -55,6 +55,10 @@ data "aws_ssm_parameter" "housingregister_sns_topic_arn" {
   name = "/sns-topic/development/housingregister/arn"
 }
 
+data "aws_ssm_parameter" "equality_information_sns_topic_arn" {
+  name = "/sns-topic/development/equalityInformation/arn"
+}
+
 resource "aws_sqs_queue" "activity_history_dead_letter_queue" {
   name                              = "activityhistorydeadletterqueue.fifo"
   fifo_queue                        = true
@@ -127,6 +131,18 @@ resource "aws_sqs_queue_policy" "activity_history_queue_policy" {
               "Condition": {
                   "ArnEquals": {
                       "aws:SourceArn": "${data.aws_ssm_parameter.housingregister_sns_topic_arn.value}"
+                  }
+              }
+          },
+          {
+              "Sid": "Fifth",
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": "sqs:SendMessage",
+              "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+              "Condition": {
+                  "ArnEquals": {
+                      "aws:SourceArn": "${data.aws_ssm_parameter.equality_information_sns_topic_arn.value}"
                   }
               }
           }
