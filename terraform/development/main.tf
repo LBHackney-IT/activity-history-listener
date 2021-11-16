@@ -179,6 +179,13 @@ resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_housi
   raw_message_delivery = true
 }
 
+resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_equality_information_sns" {
+  topic_arn            = data.aws_ssm_parameter.equality_information_sns_topic_arn.value
+  protocol             = "sqs"
+  endpoint             = aws_sqs_queue.activity_history_queue.arn
+  raw_message_delivery = true
+}
+
 resource "aws_ssm_parameter" "activity_history_sqs_queue_arn" {
   name  = "/sqs-queue/development/activity-history/arn"
   type  = "String"
