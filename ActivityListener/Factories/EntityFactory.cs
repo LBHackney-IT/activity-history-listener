@@ -14,9 +14,13 @@ namespace ActivityListener.Factories
                 case EventTypes.ContactDetailAddedEvent:
                 case EventTypes.TenureCreatedEvent:
                 case EventTypes.PersonAddedToTenureEvent:
+                case EventTypes.HousingApplicationCreatedEvent:
+                case EventTypes.EqualityInformationCreatedEvent:
                     return ActivityType.create;
                 case EventTypes.PersonUpdatedEvent:
                 case EventTypes.TenureUpdatedEvent:
+                case EventTypes.HousingApplicationUpdatedEvent:
+                case EventTypes.EqualityInformationUpdatedEvent:
                     return ActivityType.update;
                 case EventTypes.ContactDetailDeletedEvent:
                 case EventTypes.PersonRemovedFromTenureEvent:
@@ -43,7 +47,12 @@ namespace ActivityListener.Factories
                 case EventTypes.PersonAddedToTenureEvent:
                 case EventTypes.PersonRemovedFromTenureEvent:
                     return TargetType.tenurePerson;
-
+                case EventTypes.HousingApplicationCreatedEvent:
+                case EventTypes.HousingApplicationUpdatedEvent:
+                    return TargetType.housingApplication;
+                case EventTypes.EqualityInformationCreatedEvent:
+                case EventTypes.EqualityInformationUpdatedEvent:
+                    return TargetType.personEqualityInformation;
                 default:
                     throw new ArgumentException($"Unknown event type: {eventSns.EventType}");
             }

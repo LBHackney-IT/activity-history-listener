@@ -1,32 +1,33 @@
+using ActivityListener.Gateway;
 using Amazon.DynamoDBv2.DataModel;
 using AutoFixture;
 using FluentAssertions;
+using Hackney.Core.Testing.DynamoDb;
+using Hackney.Core.Testing.Shared;
+using Hackney.Shared.ActivityHistory.Domain;
+using Hackney.Shared.ActivityHistory.Factories;
+using Hackney.Shared.ActivityHistory.Infrastructure;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ActivityListener.Gateway;
 using Xunit;
-using Hackney.Shared.ActivityHistory.Domain;
-using Hackney.Shared.ActivityHistory.Infrastructure;
-using Hackney.Shared.ActivityHistory.Factories;
 
 namespace ActivityListener.Tests.Gateway
 {
-    [Collection("Aws collection")]
+    [Collection("AppTest collection")]
     public class DynamoDbGatewayTests : IDisposable
     {
         private readonly Fixture _fixture = new Fixture();
         private readonly Mock<ILogger<DynamoDbGateway>> _logger;
         private readonly DynamoDbGateway _classUnderTest;
-        private AwsIntegrationTests _dbTestFixture;
-        private IDynamoDBContext DynamoDb => _dbTestFixture.DynamoDbContext;
-        private readonly List<Action> _cleanup = new List<Action>();
+        private readonly IDynamoDbFixture _dbFixture;
+        private IDynamoDBContext DynamoDb => _dbFixture.DynamoDbContext;
 
-        public DynamoDbGatewayTests(AwsIntegrationTests dbTestFixture)
+        public DynamoDbGatewayTests(MockApplicationFactory appFactory)
         {
-            _dbTestFixture = dbTestFixture;
+            _dbFixture = appFactory.DynamoDbFixture;
             _logger = new Mock<ILogger<DynamoDbGateway>>();
             _classUnderTest = new DynamoDbGateway(DynamoDb, _logger.Object);
         }
@@ -38,18 +39,14 @@ namespace ActivityListener.Tests.Gateway
         }
 
         private bool _disposed;
+        private object _dbTestFixture;
+
         protected virtual void Dispose(bool disposing)
         {
             if (disposing && !_disposed)
             {
-                foreach (var action in _cleanup)
-                    action();
-
                 if (_dbTestFixture != null)
-                {
-                    _dbTestFixture.Dispose();
                     _dbTestFixture = null;
-                }
 
                 _disposed = true;
             }
