@@ -1,5 +1,6 @@
 using ActivityListener.Tests.E2ETests.Fixtures;
 using ActivityListener.Tests.E2ETests.Steps;
+using Hackney.Core.Testing.DynamoDb;
 using System;
 using System.Collections.Generic;
 using TestStack.BDDfy;
@@ -11,19 +12,19 @@ namespace ActivityListener.Tests.E2ETests.Stories
         AsA = "SQS Activity History Listener",
         IWant = "a function to process the entity events",
         SoThat = "an entity activity history record is created for each event")]
-    [Collection("Aws collection")]
+    [Collection("AppTest collection")]
     public class ProcessActivityEventTests : IDisposable
     {
-        private readonly AwsIntegrationTests _dbFixture;
+        private readonly IDynamoDbFixture _dbFixture;
         private readonly ActivityHistoryFixture _activityHistoryFixture;
 
         private readonly ProcessActivityEventSteps _steps;
 
-        public ProcessActivityEventTests(AwsIntegrationTests dbFixture)
+        public ProcessActivityEventTests(MockApplicationFactory appFactory)
         {
-            _dbFixture = dbFixture;
+            _dbFixture = appFactory.DynamoDbFixture;
 
-            _activityHistoryFixture = new ActivityHistoryFixture(dbFixture.DynamoDbContext);
+            _activityHistoryFixture = new ActivityHistoryFixture(_dbFixture.DynamoDbContext);
             _steps = new ProcessActivityEventSteps(_activityHistoryFixture);
         }
 
