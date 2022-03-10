@@ -8,7 +8,6 @@ provider:
     apiGateway: true
   vpc: ${self:custom.vpc.${opt:stage}}
   stage: ${opt:stage}
-  account: ${opt:account}
   region: eu-west-2
 
 package:
@@ -20,8 +19,8 @@ functions:
     handler: ActivityListener::ActivityListener.SqsFunction::FunctionHandler
     role: lambdaExecutionRole
     events:
-      - sqs: ${ssm:/sqs-queue/${self:provider.stage}/activity-history/arn} 
-      
+      - sqs: ${ssm:/sqs-queue/${self:provider.stage}/activity-history/arn}
+
 resources:
   Resources:
     lambdaExecutionRole:
@@ -40,7 +39,7 @@ resources:
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
           - arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess
-        Policies:          
+        Policies:
           - PolicyName: manageLogs
             PolicyDocument:
               Version: '2012-10-17'

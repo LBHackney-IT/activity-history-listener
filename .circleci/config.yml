@@ -62,8 +62,6 @@ commands:
     parameters:
       stage:
         type: string
-      aws-account:
-        type: string
     steps:
       - *attach_workspace
       - checkout
@@ -86,7 +84,7 @@ commands:
           name: Deploy lambda
           command: |
             cd ./ActivityListener/
-            sls deploy --stage <<parameters.stage>> --account <<parameters.aws-account>> --conceal
+            sls deploy --stage <<parameters.stage>> --conceal
 
 jobs:
   check-code-formatting:
@@ -145,25 +143,24 @@ jobs:
     steps:
       - deploy-lambda:
           stage: "development"
-          aws-account: $AWS_ACCOUNT_DEVELOPMENT
   deploy-to-staging:
     executor: docker-dotnet
     steps:
       - deploy-lambda:
           stage: "staging"
-          aws-account: $AWS_ACCOUNT_STAGING
   deploy-to-production:
     executor: docker-dotnet
     steps:
       - deploy-lambda:
           stage: "production"
-          aws-account: $AWS_ACCOUNT_PRODUCTION
 
 workflows:
   check-and-deploy-development:
     jobs:
-      - check-code-formatting
-      - build-and-test
+      - check-code-formatting:
+          context: api-nuget-token-context
+      - build-and-test:
+          context: api-nuget-token-context
       - assume-role-development:
           context: api-assume-role-housing-development-context
           requires:
@@ -178,6 +175,7 @@ workflows:
             branches:
               only: master
       - deploy-to-development:
+          context: api-nuget-token-context
           requires:
             - terraform-init-and-apply-to-development
           filters:
@@ -185,8 +183,10 @@ workflows:
               only: master
   check-and-deploy-staging-and-production:
       jobs:
-      - check-code-formatting
+      - check-code-formatting:
+          context: api-nuget-token-context
       - build-and-test:
+          context: api-nuget-token-context
           filters:
             branches:
               only: release
@@ -204,6 +204,7 @@ workflows:
             branches:
               only: release
       - deploy-to-staging:
+          context: api-nuget-token-context
           requires:
             - terraform-init-and-apply-to-staging
           filters:
@@ -235,6 +236,7 @@ workflows:
             branches:
               only: release
       - deploy-to-production:
+          context: api-nuget-token-context
           requires:
             - permit-production-release
             - terraform-init-and-apply-to-production
