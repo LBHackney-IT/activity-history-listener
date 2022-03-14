@@ -16,11 +16,13 @@ namespace ActivityListener.Factories
                 case EventTypes.PersonAddedToTenureEvent:
                 case EventTypes.HousingApplicationCreatedEvent:
                 case EventTypes.EqualityInformationCreatedEvent:
+                case EventTypes.ProcessStartedEvent:
                     return ActivityType.create;
                 case EventTypes.PersonUpdatedEvent:
                 case EventTypes.TenureUpdatedEvent:
                 case EventTypes.HousingApplicationUpdatedEvent:
                 case EventTypes.EqualityInformationUpdatedEvent:
+                case EventTypes.ProcessClosedEvent:
                     return ActivityType.update;
                 case EventTypes.ContactDetailDeletedEvent:
                 case EventTypes.PersonRemovedFromTenureEvent:
@@ -53,6 +55,9 @@ namespace ActivityListener.Factories
                 case EventTypes.EqualityInformationCreatedEvent:
                 case EventTypes.EqualityInformationUpdatedEvent:
                     return TargetType.personEqualityInformation;
+                case EventTypes.ProcessStartedEvent:
+                case EventTypes.ProcessClosedEvent:
+                    return TargetType.process;
                 default:
                     throw new ArgumentException($"Unknown event type: {eventSns.EventType}");
             }

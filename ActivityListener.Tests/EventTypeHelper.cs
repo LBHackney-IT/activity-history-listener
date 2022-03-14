@@ -16,7 +16,9 @@ namespace ActivityListener.Tests
                 EventTypes.HousingApplicationCreatedEvent,
                 EventTypes.HousingApplicationUpdatedEvent,
                 EventTypes.EqualityInformationCreatedEvent,
-                EventTypes.EqualityInformationUpdatedEvent
+                EventTypes.EqualityInformationUpdatedEvent,
+                EventTypes.ProcessStartedEvent,
+                EventTypes.ProcessClosedEvent
             };
     }
 }
