@@ -59,6 +59,10 @@ data "aws_ssm_parameter" "equality_information_sns_topic_arn" {
   name = "/sns-topic/development/equalityInformation/arn"
 }
 
+data "aws_ssm_parameter" "processes_sns_topic_arn" {
+  name = "/sns-topic/development/processes/arn"
+}
+
 resource "aws_sqs_queue" "activity_history_dead_letter_queue" {
   name                              = "activityhistorydeadletterqueue.fifo"
   fifo_queue                        = true
@@ -181,6 +185,13 @@ resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_housi
 
 resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_equality_information_sns" {
   topic_arn            = data.aws_ssm_parameter.equality_information_sns_topic_arn.value
+  protocol             = "sqs"
+  endpoint             = aws_sqs_queue.activity_history_queue.arn
+  raw_message_delivery = true
+}
+
+resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_processes_sns" {
+  topic_arn            = data.aws_ssm_parameter.processes_sns_topic_arn.value
   protocol             = "sqs"
   endpoint             = aws_sqs_queue.activity_history_queue.arn
   raw_message_delivery = true
