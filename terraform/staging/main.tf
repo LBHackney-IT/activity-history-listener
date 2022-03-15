@@ -148,7 +148,19 @@ resource "aws_sqs_queue_policy" "activity_history_queue_policy" {
                       "aws:SourceArn": "${data.aws_ssm_parameter.equality_information_sns_topic_arn.value}"
                   }
               }
-          }
+          },
+          {
+              "Sid": "Sixth",
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": "sqs:SendMessage",
+              "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+              "Condition": {
+                  "ArnEquals": {
+                      "aws:SourceArn": "${data.aws_ssm_parameter.processes_sns_topic_arn.value}"
+                  }
+              }
+          }             
       ]
   }
   POLICY
