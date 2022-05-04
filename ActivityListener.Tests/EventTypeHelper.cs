@@ -18,6 +18,7 @@ namespace ActivityListener.Tests
                 EventTypes.EqualityInformationCreatedEvent,
                 EventTypes.EqualityInformationUpdatedEvent,
                 EventTypes.ProcessStartedEvent,
+                EventTypes.ProcessUpdatedEvent,
                 EventTypes.ProcessClosedEvent
             };
     }

@@ -21,6 +21,7 @@ namespace ActivityListener
         public const string EqualityInformationUpdatedEvent = "EqualityInformationUpdatedEvent";
 
         public const string ProcessStartedEvent = "ProcessStartedEvent";
+        public const string ProcessUpdatedEvent = "ProcessUpdatedEvent";
         public const string ProcessClosedEvent = "ProcessClosedEvent";
     }
 }

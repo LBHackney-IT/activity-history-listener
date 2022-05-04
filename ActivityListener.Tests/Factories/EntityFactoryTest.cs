@@ -42,6 +42,7 @@ namespace ActivityListener.Tests.Factories
                 case EventTypes.TenureUpdatedEvent:
                 case EventTypes.HousingApplicationUpdatedEvent:
                 case EventTypes.EqualityInformationUpdatedEvent:
+                case EventTypes.ProcessUpdatedEvent:
                 case EventTypes.ProcessClosedEvent:
                     eventSns.GetActivityType().Should().Be(ActivityType.update);
                     break;
@@ -92,6 +93,7 @@ namespace ActivityListener.Tests.Factories
                     eventSns.GetTargetType().Should().Be(TargetType.personEqualityInformation);
                     break;
                 case EventTypes.ProcessStartedEvent:
+                case EventTypes.ProcessUpdatedEvent:
                 case EventTypes.ProcessClosedEvent:
                     eventSns.GetTargetType().Should().Be(TargetType.process);
                     break;
