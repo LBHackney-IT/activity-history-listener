@@ -22,6 +22,7 @@ namespace ActivityListener.Factories
                 case EventTypes.TenureUpdatedEvent:
                 case EventTypes.HousingApplicationUpdatedEvent:
                 case EventTypes.EqualityInformationUpdatedEvent:
+                case EventTypes.ProcessUpdatedEvent:
                 case EventTypes.ProcessClosedEvent:
                     return ActivityType.update;
                 case EventTypes.ContactDetailDeletedEvent:
@@ -56,6 +57,7 @@ namespace ActivityListener.Factories
                 case EventTypes.EqualityInformationUpdatedEvent:
                     return TargetType.personEqualityInformation;
                 case EventTypes.ProcessStartedEvent:
+                case EventTypes.ProcessUpdatedEvent:
                 case EventTypes.ProcessClosedEvent:
                     return TargetType.process;
                 default:
