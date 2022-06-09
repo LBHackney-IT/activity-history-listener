@@ -24,6 +24,7 @@ namespace ActivityListener.Factories
                 case EventTypes.EqualityInformationUpdatedEvent:
                 case EventTypes.ProcessUpdatedEvent:
                 case EventTypes.ProcessClosedEvent:
+                case EventTypes.ProcessCompletedEvent:
                     return ActivityType.update;
                 case EventTypes.ContactDetailDeletedEvent:
                 case EventTypes.PersonRemovedFromTenureEvent:
@@ -59,6 +60,7 @@ namespace ActivityListener.Factories
                 case EventTypes.ProcessStartedEvent:
                 case EventTypes.ProcessUpdatedEvent:
                 case EventTypes.ProcessClosedEvent:
+                case EventTypes.ProcessCompletedEvent:
                     return TargetType.process;
                 default:
                     throw new ArgumentException($"Unknown event type: {eventSns.EventType}");
