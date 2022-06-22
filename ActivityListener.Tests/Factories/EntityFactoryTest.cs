@@ -44,6 +44,7 @@ namespace ActivityListener.Tests.Factories
                 case EventTypes.EqualityInformationUpdatedEvent:
                 case EventTypes.ProcessUpdatedEvent:
                 case EventTypes.ProcessClosedEvent:
+                case EventTypes.ProcessCompletedEvent:
                     eventSns.GetActivityType().Should().Be(ActivityType.update);
                     break;
                 case EventTypes.ContactDetailDeletedEvent:
@@ -95,6 +96,7 @@ namespace ActivityListener.Tests.Factories
                 case EventTypes.ProcessStartedEvent:
                 case EventTypes.ProcessUpdatedEvent:
                 case EventTypes.ProcessClosedEvent:
+                case EventTypes.ProcessCompletedEvent:
                     eventSns.GetTargetType().Should().Be(TargetType.process);
                     break;
                 default:
