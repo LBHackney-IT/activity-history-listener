@@ -36,6 +36,7 @@ namespace ActivityListener.Tests.Factories
                 case EventTypes.HousingApplicationCreatedEvent:
                 case EventTypes.EqualityInformationCreatedEvent:
                 case EventTypes.ProcessStartedEvent:
+                case EventTypes.NoteCreatedAgainstProcessEvent:
                     eventSns.GetActivityType().Should().Be(ActivityType.create);
                     break;
                 case EventTypes.PersonUpdatedEvent:
@@ -97,6 +98,7 @@ namespace ActivityListener.Tests.Factories
                 case EventTypes.ProcessUpdatedEvent:
                 case EventTypes.ProcessClosedEvent:
                 case EventTypes.ProcessCompletedEvent:
+                case EventTypes.NoteCreatedAgainstProcessEvent:
                     eventSns.GetTargetType().Should().Be(TargetType.process);
                     break;
                 default:
