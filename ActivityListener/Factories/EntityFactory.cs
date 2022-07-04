@@ -17,6 +17,7 @@ namespace ActivityListener.Factories
                 case EventTypes.HousingApplicationCreatedEvent:
                 case EventTypes.EqualityInformationCreatedEvent:
                 case EventTypes.ProcessStartedEvent:
+                case EventTypes.NoteCreatedAgainstProcessEvent:
                     return ActivityType.create;
                 case EventTypes.PersonUpdatedEvent:
                 case EventTypes.TenureUpdatedEvent:
@@ -61,6 +62,7 @@ namespace ActivityListener.Factories
                 case EventTypes.ProcessUpdatedEvent:
                 case EventTypes.ProcessClosedEvent:
                 case EventTypes.ProcessCompletedEvent:
+                case EventTypes.NoteCreatedAgainstProcessEvent:
                     return TargetType.process;
                 default:
                     throw new ArgumentException($"Unknown event type: {eventSns.EventType}");
