@@ -37,6 +37,8 @@ namespace ActivityListener.Tests.Factories
                 case EventTypes.EqualityInformationCreatedEvent:
                 case EventTypes.ProcessStartedEvent:
                 case EventTypes.NoteCreatedAgainstProcessEvent:
+                case EventTypes.ProcessStartedAgainstPersonEvent:
+                case EventTypes.ProcessStartedAgainstTenureEvent:
                     eventSns.GetActivityType().Should().Be(ActivityType.create);
                     break;
                 case EventTypes.PersonUpdatedEvent:
@@ -72,6 +74,7 @@ namespace ActivityListener.Tests.Factories
             {
                 case EventTypes.PersonCreatedEvent:
                 case EventTypes.PersonUpdatedEvent:
+                case EventTypes.ProcessStartedAgainstPersonEvent:
                     eventSns.GetTargetType().Should().Be(TargetType.person);
                     break;
                 case EventTypes.ContactDetailAddedEvent:
@@ -80,6 +83,7 @@ namespace ActivityListener.Tests.Factories
                     break;
                 case EventTypes.TenureCreatedEvent:
                 case EventTypes.TenureUpdatedEvent:
+                case EventTypes.ProcessStartedAgainstTenureEvent:
                     eventSns.GetTargetType().Should().Be(TargetType.tenure);
                     break;
                 case EventTypes.PersonAddedToTenureEvent:
