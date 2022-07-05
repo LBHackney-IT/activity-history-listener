@@ -26,5 +26,7 @@ namespace ActivityListener
         public const string ProcessCompletedEvent = "ProcessCompletedEvent";
 
         public const string NoteCreatedAgainstProcessEvent = "NoteCreatedAgainstProcessEvent";
+        public const string ProcessStartedAgainstTenureEvent = "ProcessStartedAgainstTenureEvent";
+        public const string ProcessStartedAgainstPersonEvent = "ProcessStartedAgainstPersonEvent";
     }
 }
