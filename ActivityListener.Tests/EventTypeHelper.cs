@@ -22,8 +22,8 @@ namespace ActivityListener.Tests
                 EventTypes.ProcessClosedEvent,
                 EventTypes.ProcessCompletedEvent,
                 EventTypes.NoteCreatedAgainstProcessEvent,
-                EventTypes.ProcessStartedAgainstTenure,
-                EventTypes.ProcessStartedAgainstPerson
+                EventTypes.ProcessStartedAgainstTenureEvent,
+                EventTypes.ProcessStartedAgainstPersonEvent,
             };
     }
 }
