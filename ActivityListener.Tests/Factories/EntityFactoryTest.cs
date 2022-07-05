@@ -46,6 +46,8 @@ namespace ActivityListener.Tests.Factories
                 case EventTypes.ProcessUpdatedEvent:
                 case EventTypes.ProcessClosedEvent:
                 case EventTypes.ProcessCompletedEvent:
+                case EventTypes.ProcessStartedAgainstPerson:
+                case EventTypes.ProcessStartedAgainstTenure:
                     eventSns.GetActivityType().Should().Be(ActivityType.update);
                     break;
                 case EventTypes.ContactDetailDeletedEvent:
