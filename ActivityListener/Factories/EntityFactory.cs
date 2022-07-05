@@ -26,6 +26,8 @@ namespace ActivityListener.Factories
                 case EventTypes.ProcessUpdatedEvent:
                 case EventTypes.ProcessClosedEvent:
                 case EventTypes.ProcessCompletedEvent:
+                case EventTypes.ProcessStartedAgainstTenure:
+                case EventTypes.ProcessStartedAgainstPerson:
                     return ActivityType.update;
                 case EventTypes.ContactDetailDeletedEvent:
                 case EventTypes.PersonRemovedFromTenureEvent:
@@ -64,6 +66,11 @@ namespace ActivityListener.Factories
                 case EventTypes.ProcessCompletedEvent:
                 case EventTypes.NoteCreatedAgainstProcessEvent:
                     return TargetType.process;
+                case EventTypes.ProcessStartedAgainstTenure:
+                    return TargetType.tenure;
+                case EventTypes.ProcessStartedAgainstPerson:
+                    return TargetType.person;
+
                 default:
                     throw new ArgumentException($"Unknown event type: {eventSns.EventType}");
             }
