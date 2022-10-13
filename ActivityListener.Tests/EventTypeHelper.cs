@@ -5,6 +5,8 @@ namespace ActivityListener.Tests
         public static string[] AllEventTypes =>
             new[]
             {
+                EventTypes.AssetCreatedEvent,
+                EventTypes.AssetUpdatedEvent,
                 EventTypes.PersonCreatedEvent,
                 EventTypes.PersonUpdatedEvent,
                 EventTypes.ContactDetailAddedEvent,
