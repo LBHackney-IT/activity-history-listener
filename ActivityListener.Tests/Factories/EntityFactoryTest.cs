@@ -30,7 +30,6 @@ namespace ActivityListener.Tests.Factories
             switch (eventType)
             {
                 case EventTypes.AssetCreatedEvent:
-                case EventTypes.ContactDetailAddedEvent:
                 case EventTypes.PersonCreatedEvent:
                 case EventTypes.ContactDetailAddedEvent:
                 case EventTypes.TenureCreatedEvent:
