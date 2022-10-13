@@ -10,6 +10,7 @@ namespace ActivityListener.Factories
         {
             switch (eventSns.EventType)
             {
+                case EventTypes.AssetCreatedEvent:
                 case EventTypes.PersonCreatedEvent:
                 case EventTypes.ContactDetailAddedEvent:
                 case EventTypes.TenureCreatedEvent:
@@ -21,6 +22,7 @@ namespace ActivityListener.Factories
                 case EventTypes.ProcessStartedAgainstTenureEvent:
                 case EventTypes.ProcessStartedAgainstPersonEvent:
                     return ActivityType.create;
+                case EventTypes.AssetUpdatedEvent:
                 case EventTypes.PersonUpdatedEvent:
                 case EventTypes.TenureUpdatedEvent:
                 case EventTypes.HousingApplicationUpdatedEvent:
@@ -51,6 +53,9 @@ namespace ActivityListener.Factories
                 case EventTypes.TenureCreatedEvent:
                 case EventTypes.TenureUpdatedEvent:
                     return TargetType.tenure;
+                case EventTypes.AssetCreatedEvent:
+                case EventTypes.AssetUpdatedEvent:
+                    return TargetType.asset;
                 case EventTypes.PersonAddedToTenureEvent:
                 case EventTypes.PersonRemovedFromTenureEvent:
                     return TargetType.tenurePerson;

@@ -2,6 +2,9 @@ namespace ActivityListener
 {
     public static class EventTypes
     {
+        public const string AssetCreatedEvent = "AssetCreatedEvent";
+        public const string AssetUpdatedEvent = "AssetUpdatedEvent";
+
         public const string PersonCreatedEvent = "PersonCreatedEvent";
         public const string PersonUpdatedEvent = "PersonUpdatedEvent";
 
