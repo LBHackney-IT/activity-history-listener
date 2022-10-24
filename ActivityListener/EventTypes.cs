@@ -5,6 +5,9 @@ namespace ActivityListener
         public const string AssetCreatedEvent = "AssetCreatedEvent";
         public const string AssetUpdatedEvent = "AssetUpdatedEvent";
 
+        public const string AssetCreatedEvent = "ContractCreatedEvent";
+        public const string AssetUpdatedEvent = "ContractUpdatedEvent";
+
         public const string PersonCreatedEvent = "PersonCreatedEvent";
         public const string PersonUpdatedEvent = "PersonUpdatedEvent";
 
