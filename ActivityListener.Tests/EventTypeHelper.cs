@@ -7,6 +7,8 @@ namespace ActivityListener.Tests
             {
                 EventTypes.AssetCreatedEvent,
                 EventTypes.AssetUpdatedEvent,
+                EventTypes.ContractCreatedEvent,
+                EventTypes.ContractUpdatedEvent,
                 EventTypes.PersonCreatedEvent,
                 EventTypes.PersonUpdatedEvent,
                 EventTypes.ContactDetailAddedEvent,

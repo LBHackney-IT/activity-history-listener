@@ -29,6 +29,7 @@ namespace ActivityListener.Tests.Factories
             var eventSns = new EntityEventSns() { EventType = eventType };
             switch (eventType)
             {
+                case EventTypes.ContractCreatedEvent:
                 case EventTypes.AssetCreatedEvent:
                 case EventTypes.PersonCreatedEvent:
                 case EventTypes.ContactDetailAddedEvent:
@@ -42,6 +43,7 @@ namespace ActivityListener.Tests.Factories
                 case EventTypes.ProcessStartedAgainstTenureEvent:
                     eventSns.GetActivityType().Should().Be(ActivityType.create);
                     break;
+                case EventTypes.ContractUpdatedEvent:
                 case EventTypes.AssetUpdatedEvent:
                 case EventTypes.PersonUpdatedEvent:
                 case EventTypes.TenureUpdatedEvent:
@@ -77,6 +79,10 @@ namespace ActivityListener.Tests.Factories
                 case EventTypes.AssetCreatedEvent:
                 case EventTypes.AssetUpdatedEvent:
                     eventSns.GetTargetType().Should().Be(TargetType.asset);
+                    break;
+                case EventTypes.ContractCreatedEvent:
+                case EventTypes.ContractUpdatedEvent:
+                    eventSns.GetTargetType().Should().Be(TargetType.contract);
                     break;
                 case EventTypes.PersonCreatedEvent:
                 case EventTypes.PersonUpdatedEvent:
