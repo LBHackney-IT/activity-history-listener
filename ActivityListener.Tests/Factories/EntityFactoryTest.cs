@@ -58,6 +58,7 @@ namespace ActivityListener.Tests.Factories
                 case EventTypes.PersonRemovedFromTenureEvent:
                     eventSns.GetActivityType().Should().Be(ActivityType.delete);
                     break;
+                case EventTypes.CautionaryAlertCreatedEvent:
                 default:
                     {
                         Action act = () => eventSns.GetActivityType();

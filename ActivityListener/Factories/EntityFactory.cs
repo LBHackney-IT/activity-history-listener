@@ -36,6 +36,7 @@ namespace ActivityListener.Factories
                 case EventTypes.ContactDetailDeletedEvent:
                 case EventTypes.PersonRemovedFromTenureEvent:
                     return ActivityType.delete;
+                case EventTypes.CautionaryAlertCreatedEvent:
 
                 default:
                     throw new ArgumentException($"Unknown event type: {eventSns.EventType}");

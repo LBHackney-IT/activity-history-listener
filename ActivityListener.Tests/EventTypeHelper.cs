@@ -28,6 +28,7 @@ namespace ActivityListener.Tests
                 EventTypes.NoteCreatedAgainstProcessEvent,
                 EventTypes.ProcessStartedAgainstTenureEvent,
                 EventTypes.ProcessStartedAgainstPersonEvent,
+                EventTypes.CautionaryAlertCreatedEvent
             };
     }
 }
