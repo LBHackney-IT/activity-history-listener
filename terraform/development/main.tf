@@ -76,7 +76,7 @@ data "aws_ssm_parameter" "notes_sns_topic_arn" {
 }
 
 data "aws_ssm_parameter" "cautionary_alerts_sns_topic_arn" {
-  name = "/sns-topic/development/cautionary_alerts/arn"
+  name = "/sns-topic/development/cautionary-alerts/arn"
 }
 
 resource "aws_sqs_queue" "activity_history_dead_letter_queue" {
