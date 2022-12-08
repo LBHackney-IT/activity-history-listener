@@ -41,6 +41,7 @@ namespace ActivityListener.Tests.Factories
                 case EventTypes.NoteCreatedAgainstProcessEvent:
                 case EventTypes.ProcessStartedAgainstPersonEvent:
                 case EventTypes.ProcessStartedAgainstTenureEvent:
+                case EventTypes.CautionaryAlertCreatedEvent:
                     eventSns.GetActivityType().Should().Be(ActivityType.create);
                     break;
                 case EventTypes.ContractUpdatedEvent:
@@ -58,7 +59,6 @@ namespace ActivityListener.Tests.Factories
                 case EventTypes.PersonRemovedFromTenureEvent:
                     eventSns.GetActivityType().Should().Be(ActivityType.delete);
                     break;
-                case EventTypes.CautionaryAlertCreatedEvent:
                 default:
                     {
                         Action act = () => eventSns.GetActivityType();
@@ -117,6 +117,9 @@ namespace ActivityListener.Tests.Factories
                 case EventTypes.ProcessCompletedEvent:
                 case EventTypes.NoteCreatedAgainstProcessEvent:
                     eventSns.GetTargetType().Should().Be(TargetType.process);
+                    break;
+                case EventTypes.CautionaryAlertCreatedEvent:
+                    eventSns.GetTargetType().Should().Be(TargetType.cautionaryAlert);
                     break;
                 default:
                     {

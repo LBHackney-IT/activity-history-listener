@@ -22,6 +22,7 @@ namespace ActivityListener.Factories
                 case EventTypes.NoteCreatedAgainstProcessEvent:
                 case EventTypes.ProcessStartedAgainstTenureEvent:
                 case EventTypes.ProcessStartedAgainstPersonEvent:
+                case EventTypes.CautionaryAlertCreatedEvent:
                     return ActivityType.create;
                 case EventTypes.ContractUpdatedEvent:
                 case EventTypes.AssetUpdatedEvent:
@@ -36,7 +37,6 @@ namespace ActivityListener.Factories
                 case EventTypes.ContactDetailDeletedEvent:
                 case EventTypes.PersonRemovedFromTenureEvent:
                     return ActivityType.delete;
-                case EventTypes.CautionaryAlertCreatedEvent:
 
                 default:
                     throw new ArgumentException($"Unknown event type: {eventSns.EventType}");
@@ -81,6 +81,8 @@ namespace ActivityListener.Factories
                     return TargetType.tenure;
                 case EventTypes.ProcessStartedAgainstPersonEvent:
                     return TargetType.person;
+                case EventTypes.CautionaryAlertCreatedEvent:
+                    return TargetType.cautionaryAlert;
 
                 default:
                     throw new ArgumentException($"Unknown event type: {eventSns.EventType}");
