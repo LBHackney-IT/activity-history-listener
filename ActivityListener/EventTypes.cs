@@ -34,5 +34,7 @@ namespace ActivityListener
         public const string NoteCreatedAgainstProcessEvent = "NoteCreatedAgainstProcessEvent";
         public const string ProcessStartedAgainstTenureEvent = "ProcessStartedAgainstTenureEvent";
         public const string ProcessStartedAgainstPersonEvent = "ProcessStartedAgainstPersonEvent";
+
+        public const string CautionaryAlertCreatedEvent = "CautionaryAlertCreatedEvent";
     }
 }
