@@ -75,6 +75,10 @@ data "aws_ssm_parameter" "notes_sns_topic_arn" {
   name = "/sns-topic/development/notes/arn"
 }
 
+data "aws_ssm_parameter" "cautionary_alerts_sns_topic_arn" {
+  name = "/sns-topic/development/cautionary-alerts/arn"
+}
+
 resource "aws_sqs_queue" "activity_history_dead_letter_queue" {
   name                              = "activityhistorydeadletterqueue.fifo"
   fifo_queue                        = true
@@ -209,6 +213,18 @@ resource "aws_sqs_queue_policy" "activity_history_queue_policy" {
                       "aws:SourceArn": "${data.aws_ssm_parameter.contract_sns_topic_arn.value}"
                   }
               }
+          },
+          {
+              "Sid": "Tenth",
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": "sqs:SendMessage",
+              "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+              "Condition": {
+                  "ArnEquals": {
+                      "aws:SourceArn": "${data.aws_ssm_parameter.cautionary_alerts_sns_topic_arn.value}"
+                  }
+              }
           }
       ]
   }
@@ -279,6 +295,13 @@ resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_asset
 
 resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_contract_sns" {
   topic_arn            = data.aws_ssm_parameter.contract_sns_topic_arn.value
+  protocol             = "sqs"
+  endpoint             = aws_sqs_queue.activity_history_queue.arn
+  raw_message_delivery = true
+}
+
+resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_cautionary_alerts_sns" {
+  topic_arn            = data.aws_ssm_parameter.cautionary_alerts_sns_topic_arn.value
   protocol             = "sqs"
   endpoint             = aws_sqs_queue.activity_history_queue.arn
   raw_message_delivery = true
