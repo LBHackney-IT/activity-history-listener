@@ -300,13 +300,6 @@ resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_contr
   raw_message_delivery = true
 }
 
-resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_cautionary_alerts_sns" {
-  topic_arn            = data.aws_ssm_parameter.cautionary_alerts_sns_topic_arn.value
-  protocol             = "sqs"
-  endpoint             = aws_sqs_queue.activity_history_queue.arn
-  raw_message_delivery = true
-}
-
 module "activity_history_listener_cw_dashboard" {
   source                     = "github.com/LBHackney-IT/aws-hackney-common-terraform.git//modules/cloudwatch/dashboards/listener-dashboard"
   environment_name           = var.environment_name
