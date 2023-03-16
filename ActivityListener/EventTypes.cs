@@ -36,5 +36,6 @@ namespace ActivityListener
         public const string ProcessStartedAgainstPersonEvent = "ProcessStartedAgainstPersonEvent";
 
         public const string CautionaryAlertCreatedEvent = "CautionaryAlertCreatedEvent";
+        public const string CautionaryAlertEndedEvent = "CautionaryAlertEndedEvent";
     }
 }
