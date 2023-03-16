@@ -59,6 +59,9 @@ namespace ActivityListener.Tests.Factories
                 case EventTypes.PersonRemovedFromTenureEvent:
                     eventSns.GetActivityType().Should().Be(ActivityType.delete);
                     break;
+                case EventTypes.CautionaryAlertEndedEvent:
+                    eventSns.GetActivityType().Should().Be(ActivityType.end);
+                    break;
                 default:
                     {
                         Action act = () => eventSns.GetActivityType();
@@ -119,6 +122,7 @@ namespace ActivityListener.Tests.Factories
                     eventSns.GetTargetType().Should().Be(TargetType.process);
                     break;
                 case EventTypes.CautionaryAlertCreatedEvent:
+                case EventTypes.CautionaryAlertEndedEvent:
                     eventSns.GetTargetType().Should().Be(TargetType.cautionaryAlert);
                     break;
                 default:

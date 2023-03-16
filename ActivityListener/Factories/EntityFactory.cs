@@ -37,6 +37,8 @@ namespace ActivityListener.Factories
                 case EventTypes.ContactDetailDeletedEvent:
                 case EventTypes.PersonRemovedFromTenureEvent:
                     return ActivityType.delete;
+                case EventTypes.CautionaryAlertEndedEvent:
+                    return ActivityType.end;
 
                 default:
                     throw new ArgumentException($"Unknown event type: {eventSns.EventType}");
@@ -82,6 +84,7 @@ namespace ActivityListener.Factories
                 case EventTypes.ProcessStartedAgainstPersonEvent:
                     return TargetType.person;
                 case EventTypes.CautionaryAlertCreatedEvent:
+                case EventTypes.CautionaryAlertEndedEvent:
                     return TargetType.cautionaryAlert;
 
                 default:
