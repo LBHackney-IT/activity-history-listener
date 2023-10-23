@@ -33,6 +33,7 @@ namespace ActivityListener.Factories
                 case EventTypes.ProcessUpdatedEvent:
                 case EventTypes.ProcessClosedEvent:
                 case EventTypes.ProcessCompletedEvent:
+                case EventTypes.PatchOrAreaResEntityEditedEvent:
                     return ActivityType.update;
                 case EventTypes.ContactDetailDeletedEvent:
                 case EventTypes.PersonRemovedFromTenureEvent:
@@ -86,6 +87,8 @@ namespace ActivityListener.Factories
                 case EventTypes.CautionaryAlertCreatedEvent:
                 case EventTypes.CautionaryAlertEndedEvent:
                     return TargetType.cautionaryAlert;
+                case EventTypes.PatchOrAreaResEntityEditedEvent:
+                    return TargetType.patchesAndAreas;
 
                 default:
                     throw new ArgumentException($"Unknown event type: {eventSns.EventType}");

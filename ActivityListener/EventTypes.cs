@@ -37,5 +37,6 @@ namespace ActivityListener
 
         public const string CautionaryAlertCreatedEvent = "CautionaryAlertCreatedEvent";
         public const string CautionaryAlertEndedEvent = "CautionaryAlertEndedEvent";
+        public const string PatchOrAreaResEntityEditedEvent = "PatchOrAreaResEntityEditedEvent";
     }
 }
