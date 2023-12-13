@@ -53,6 +53,7 @@ namespace ActivityListener.Tests.Factories
                 case EventTypes.ProcessUpdatedEvent:
                 case EventTypes.ProcessClosedEvent:
                 case EventTypes.ProcessCompletedEvent:
+                case EventTypes.PatchOrAreaResEntityEditedEvent:
                     eventSns.GetActivityType().Should().Be(ActivityType.update);
                     break;
                 case EventTypes.ContactDetailDeletedEvent:
@@ -124,6 +125,9 @@ namespace ActivityListener.Tests.Factories
                 case EventTypes.CautionaryAlertCreatedEvent:
                 case EventTypes.CautionaryAlertEndedEvent:
                     eventSns.GetTargetType().Should().Be(TargetType.cautionaryAlert);
+                    break;
+                case EventTypes.PatchOrAreaResEntityEditedEvent:
+                    eventSns.GetTargetType().Should().Be(TargetType.patchesAndAreas);
                     break;
                 default:
                     {
