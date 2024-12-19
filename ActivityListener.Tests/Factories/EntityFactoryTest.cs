@@ -63,6 +63,12 @@ namespace ActivityListener.Tests.Factories
                 case EventTypes.CautionaryAlertEndedEvent:
                     eventSns.GetActivityType().Should().Be(ActivityType.end);
                     break;
+                case EventTypes.ContactDetailEditedEvent:
+                case EventTypes.NoteCreatedAgainstAssetEvent:
+                case EventTypes.NoteCreatedAgainstTenureEvent:
+                case EventTypes.NoteCreatedAgainstPersonEvent:
+                    eventSns.GetActivityType().Should().BeNull();
+                    break;
                 default:
                     {
                         Action act = () => eventSns.GetActivityType();
