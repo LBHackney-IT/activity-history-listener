@@ -5,6 +5,7 @@ using ActivityListener.UseCase;
 using AutoFixture;
 using FluentAssertions;
 using Hackney.Shared.ActivityHistory.Domain;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Threading.Tasks;
@@ -21,12 +22,15 @@ namespace ActivityListener.Tests.UseCase
 
         private readonly Fixture _fixture;
 
+        private readonly Mock<ILogger<MessageProcessor>> _mockLogger;
+
         public MessageProcessorTests()
         {
             _fixture = new Fixture();
 
             _mockGateway = new Mock<IDynamoDbGateway>();
-            _sut = new MessageProcessor(_mockGateway.Object);
+            _mockLogger = new Mock<ILogger<MessageProcessor>>();
+            _sut = new MessageProcessor(_mockGateway.Object, _mockLogger.Object);
 
             _eventSns = CreateEventSns();
         }
