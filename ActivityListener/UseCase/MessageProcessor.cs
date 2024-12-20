@@ -13,10 +13,10 @@ namespace ActivityListener.UseCase
         private readonly IDynamoDbGateway _dbGateway;
         private readonly ILogger<MessageProcessor> _logger;
 
-        public MessageProcessor(IDynamoDbGateway dbGateway)
+        public MessageProcessor(IDynamoDbGateway dbGateway, ILogger<MessageProcessor> logger)
         {
             _dbGateway = dbGateway;
-            _logger = new LoggerFactory().CreateLogger<MessageProcessor>();
+            _logger = logger;
         }
 
         public async Task ProcessMessageAsync(EntityEventSns message)
