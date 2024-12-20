@@ -125,6 +125,13 @@ namespace ActivityListener.Tests.E2ETests.Steps
             VerifyDynamicDataObject(expected.NewData, actual.NewData);
         }
 
+        public async Task ThenNoActivityHistoryRecordIsCreatedAsync(IDynamoDBContext dbContext, EntityEventSns eventSns)
+        {
+            var dbQuery = dbContext.QueryAsync<ActivityHistoryDB>(eventSns.EntityId);
+            var resultsSet = await dbQuery.GetNextSetAsync().ConfigureAwait(false);
+            resultsSet.Count.Should().Be(0);
+        }
+
         private void VerifyDynamicDataObject(object expectedObj, object actualObj)
         {
             JToken expected = JToken.Parse(System.Text.Json.JsonSerializer.Serialize(expectedObj, _jsonOptions));
