@@ -236,19 +236,25 @@ workflows:
           context: api-nuget-token-context
           filters:
             branches:
-              ignore: master
+              ignore:
+                - master
+                - release
       - build-and-test:
           context:
             - api-nuget-token-context
             - SonarCloud
           filters:
             branches:
-              ignore: master
+              ignore:
+                - master
+                - release
       - assume-role-development:
           context: api-assume-role-housing-development-context
           filters:
             branches:
-              ignore: master
+              ignore:
+                - master
+                - release
       - terraform-init-and-plan-development:
           requires:
             - assume-role-development
