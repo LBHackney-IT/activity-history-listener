@@ -3,6 +3,7 @@ using ActivityListener.Tests.E2ETests.Steps;
 using Hackney.Core.Testing.DynamoDb;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TestStack.BDDfy;
 using Xunit;
 
@@ -51,6 +52,26 @@ namespace ActivityListener.Tests.E2ETests.Stories
             }
         }
 
+        public static IEnumerable<object[]> NotActionableEventTypes = new[]
+        {
+            new object[] { EventTypes.ContactDetailEditedEvent },
+            new object[] { EventTypes.NoteCreatedAgainstAssetEvent },
+            new object[] { EventTypes.NoteCreatedAgainstTenureEvent },
+            new object[] { EventTypes.NoteCreatedAgainstPersonEvent }
+        };
+
+        public static IEnumerable<object[]> AllActionableEventTypes()
+        {
+            var actionableEvents = EventTypeHelper.AllEventTypes.Where(
+                x => !NotActionableEventTypes.Select(y => y[0]).Contains(x)
+            );
+
+            foreach (var type in actionableEvents)
+            {
+                yield return new object[] { type };
+            }
+        }
+
         [Fact]
         public void UnknownEventTypeThrows()
         {
@@ -60,13 +81,25 @@ namespace ActivityListener.Tests.E2ETests.Stories
                 .BDDfy();
         }
 
+
         [Theory]
-        [MemberData(nameof(AllEventTypes))]
-        public void EventCreatesActivityHistoryRecord(string eventType)
+        [MemberData(nameof(AllActionableEventTypes))]
+        public void EventCreatesActivityHistoryRecordForAnActionableEvent(string eventType)
         {
+
             this.Given(g => _steps.GivenAnEntityActivityEvent(eventType))
                 .When(w => _steps.WhenTheFunctionIsTriggered(_steps.EventSns))
                 .Then(t => _steps.ThenAnActivityHistoryRecordIsCreatedAsync(_dbFixture.DynamoDbContext, _steps.EventSns))
+                .BDDfy();
+        }
+
+        [Theory]
+        [MemberData(nameof(NotActionableEventTypes))]
+        public void EventDoesNotCreateActivityHistoryRecordForANotActionableEvent(string eventType)
+        {
+            this.Given(g => _steps.GivenAnEntityActivityEvent(eventType))
+                .When(w => _steps.WhenTheFunctionIsTriggered(_steps.EventSns))
+                .Then(t => _steps.ThenNoActivityHistoryRecordIsCreatedAsync(_dbFixture.DynamoDbContext, _steps.EventSns))
                 .BDDfy();
         }
 

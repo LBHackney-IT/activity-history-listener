@@ -30,7 +30,11 @@ namespace ActivityListener.Tests
                 EventTypes.ProcessStartedAgainstPersonEvent,
                 EventTypes.CautionaryAlertCreatedEvent,
                 EventTypes.CautionaryAlertEndedEvent,
-                EventTypes.PatchOrAreaResEntityEditedEvent
+                EventTypes.PatchOrAreaResEntityEditedEvent,
+                EventTypes.NoteCreatedAgainstTenureEvent,
+                EventTypes.NoteCreatedAgainstPersonEvent,
+                EventTypes.NoteCreatedAgainstAssetEvent,
+                EventTypes.ContactDetailEditedEvent
             };
     }
 }
