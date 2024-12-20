@@ -15,6 +15,7 @@ namespace ActivityListener
         public const string PersonRemovedFromTenureEvent = "PersonRemovedFromTenureEvent";
 
         public const string ContactDetailAddedEvent = "ContactDetailAddedEvent";
+        public const string ContactDetailEditedEvent = "ContactDetailEditedEvent";
         public const string ContactDetailDeletedEvent = "ContactDetailDeletedEvent";
 
         public const string TenureCreatedEvent = "TenureCreatedEvent";
@@ -31,12 +32,16 @@ namespace ActivityListener
         public const string ProcessClosedEvent = "ProcessClosedEvent";
         public const string ProcessCompletedEvent = "ProcessCompletedEvent";
 
-        public const string NoteCreatedAgainstProcessEvent = "NoteCreatedAgainstProcessEvent";
         public const string ProcessStartedAgainstTenureEvent = "ProcessStartedAgainstTenureEvent";
         public const string ProcessStartedAgainstPersonEvent = "ProcessStartedAgainstPersonEvent";
 
         public const string CautionaryAlertCreatedEvent = "CautionaryAlertCreatedEvent";
         public const string CautionaryAlertEndedEvent = "CautionaryAlertEndedEvent";
         public const string PatchOrAreaResEntityEditedEvent = "PatchOrAreaResEntityEditedEvent";
+
+        public const string NoteCreatedAgainstProcessEvent = "NoteCreatedAgainstProcessEvent";
+        public const string NoteCreatedAgainstTenureEvent = "NoteCreatedAgainstTenureEvent";
+        public const string NoteCreatedAgainstPersonEvent = "NoteCreatedAgainstPersonEvent";
+        public const string NoteCreatedAgainstAssetEvent = "NoteCreatedAgainstAssetEvent";
     }
 }
