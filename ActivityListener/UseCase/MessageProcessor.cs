@@ -21,12 +21,13 @@ namespace ActivityListener.UseCase
 
         public async Task ProcessMessageAsync(EntityEventSns message)
         {
+            _logger.LogTrace("Calling ProcessMessageAsync for message of type {eventType}", message.EventType);
             if (message is null) throw new ArgumentNullException(nameof(message));
 
             var domainObject = message.ToDomain();
             if (domainObject is null)
             {
-                _logger.LogWarning($"Will not process message of type: {message.EventType}");
+                _logger.LogWarning("Will not process message of type: {eventType}", message.EventType);
                 return;
             }
 
