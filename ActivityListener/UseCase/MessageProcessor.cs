@@ -13,20 +13,21 @@ namespace ActivityListener.UseCase
         private readonly IDynamoDbGateway _dbGateway;
         private readonly ILogger<MessageProcessor> _logger;
 
-        public MessageProcessor(IDynamoDbGateway dbGateway)
+        public MessageProcessor(IDynamoDbGateway dbGateway, ILogger<MessageProcessor> logger)
         {
             _dbGateway = dbGateway;
-            _logger = new LoggerFactory().CreateLogger<MessageProcessor>();
+            _logger = logger;
         }
 
         public async Task ProcessMessageAsync(EntityEventSns message)
         {
+            _logger.LogTrace("Calling ProcessMessageAsync for message of type {eventType}", message.EventType);
             if (message is null) throw new ArgumentNullException(nameof(message));
 
             var domainObject = message.ToDomain();
             if (domainObject is null)
             {
-                _logger.LogWarning($"Will not process message of type: {message.EventType}");
+                _logger.LogWarning("Will not process message of type: {eventType}", message.EventType);
                 return;
             }
 
