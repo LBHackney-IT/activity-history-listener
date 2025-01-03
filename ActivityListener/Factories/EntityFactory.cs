@@ -6,7 +6,7 @@ namespace ActivityListener.Factories
 {
     public static class EntityFactory
     {
-        public static ActivityType GetActivityType(this EntityEventSns eventSns)
+        public static ActivityType? GetActivityType(this EntityEventSns eventSns)
         {
             switch (eventSns.EventType)
             {
@@ -41,6 +41,13 @@ namespace ActivityListener.Factories
                 case EventTypes.CautionaryAlertEndedEvent:
                     return ActivityType.end;
 
+                // Do not create an activity for these events
+                case EventTypes.ContactDetailEditedEvent:
+                case EventTypes.NoteCreatedAgainstAssetEvent:
+                case EventTypes.NoteCreatedAgainstTenureEvent:
+                case EventTypes.NoteCreatedAgainstPersonEvent:
+                    return null;
+
                 default:
                     throw new ArgumentException($"Unknown event type: {eventSns.EventType}");
             }
@@ -52,15 +59,19 @@ namespace ActivityListener.Factories
             {
                 case EventTypes.PersonCreatedEvent:
                 case EventTypes.PersonUpdatedEvent:
+                case EventTypes.NoteCreatedAgainstPersonEvent:
                     return TargetType.person;
                 case EventTypes.ContactDetailAddedEvent:
+                case EventTypes.ContactDetailEditedEvent:
                 case EventTypes.ContactDetailDeletedEvent:
                     return TargetType.contactDetails;
                 case EventTypes.TenureCreatedEvent:
                 case EventTypes.TenureUpdatedEvent:
+                case EventTypes.NoteCreatedAgainstTenureEvent:
                     return TargetType.tenure;
                 case EventTypes.AssetCreatedEvent:
                 case EventTypes.AssetUpdatedEvent:
+                case EventTypes.NoteCreatedAgainstAssetEvent:
                     return TargetType.asset;
                 case EventTypes.ContractCreatedEvent:
                 case EventTypes.ContractUpdatedEvent:
@@ -106,10 +117,12 @@ namespace ActivityListener.Factories
 
         public static ActivityHistoryEntity ToDomain(this EntityEventSns eventSns)
         {
+            var activityType = eventSns.GetActivityType();
+            if (activityType == null) return null;
             return new ActivityHistoryEntity
             {
                 Id = Guid.NewGuid(),
-                Type = eventSns.GetActivityType(),
+                Type = (ActivityType) activityType,
                 SourceDomain = eventSns.SourceDomain,
                 TargetType = eventSns.GetTargetType(),
                 TargetId = eventSns.EntityId,
