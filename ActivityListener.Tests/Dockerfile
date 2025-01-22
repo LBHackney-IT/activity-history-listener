@@ -24,4 +24,4 @@ COPY . .
 RUN dotnet build -c Release -o out ActivityListener/ActivityListener.csproj
 RUN dotnet build -c debug -o out ActivityListener.Tests/ActivityListener.Tests.csproj
 
-CMD dotnet test --collect "XPlat Code Coverage;Format=opencover" --results-directory ./coverage
+ENTRYPOINT ["dotnet", "test", "--collect", "XPlat Code Coverage;Format=opencover", "--results-directory", "./coverage"]
