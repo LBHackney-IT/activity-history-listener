@@ -16,8 +16,7 @@ COPY ./ActivityListener/ActivityListener.csproj ./ActivityListener/
 COPY ./ActivityListener.Tests/ActivityListener.Tests.csproj ./ActivityListener.Tests/
 COPY /NuGet.Config /root/.nuget/NuGet/NuGet.Config
 
-RUN dotnet restore ./ActivityListener/ActivityListener.csproj
-RUN dotnet restore ./ActivityListener.Tests/ActivityListener.Tests.csproj
+RUN dotnet restore
 
 COPY . .
 
