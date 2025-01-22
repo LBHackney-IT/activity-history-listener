@@ -151,6 +151,7 @@ jobs:
       - run:
           name: Run tests
           command: docker-compose run activity-listener-test
+      - sonarcloud/scan
   assume-role-development:
     executor: docker-python
     steps:
