@@ -1,6 +1,5 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0
 
-# disable microsoft telematry
 ENV DOTNET_CLI_TELEMETRY_OPTOUT='true'
 ENV DynamoDb_LocalMode='true'
 
@@ -20,7 +19,6 @@ COPY /NuGet.Config /root/.nuget/NuGet/NuGet.Config
 RUN dotnet restore ./ActivityListener/ActivityListener.csproj
 RUN dotnet restore ./ActivityListener.Tests/ActivityListener.Tests.csproj
 
-# Copy everything else and build
 COPY . .
 
 RUN dotnet build -c Release -o out ActivityListener/ActivityListener.csproj
