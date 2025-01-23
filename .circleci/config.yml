@@ -290,9 +290,12 @@ workflows:
       - preview-development-terraform:
           requires:
             - assume-role-development
-      - terraform-compliance-development:
+      - terraform-init-and-plan-development:
           requires:
             - preview-development-terraform
+      - terraform-compliance-development:
+          requires:
+            - terraform-init-and-plan-development
       - assume-role-staging:
           context: api-assume-role-housing-staging-context
           filters:
