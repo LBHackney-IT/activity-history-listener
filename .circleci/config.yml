@@ -84,6 +84,21 @@ commands:
           root: *workspace_root
           paths:
             - .aws
+  terraform-preview:
+    description: "Gives a preview for Terraform configuration changes."
+    parameters:
+      environment:
+        type: string
+    steps:
+      - *attach_workspace
+      - checkout
+      - run:
+          command: |
+            cd ./terraform/<<parameters.environment>>/
+            terraform get -update=true
+            terraform init
+            terraform plan
+          name: terraform preview
   terraform-apply:
     description: "Runs Terraform Apply"
     parameters:
@@ -215,6 +230,21 @@ jobs:
     steps:
       - terraform-apply:
           environment: "production"
+  preview-development-terraform:
+    executor: docker-terraform
+    steps:
+      - terraform-preview:
+          environment: "development"
+  preview-staging-terraform:
+    executor: docker-terraform
+    steps:
+      - terraform-preview:
+          environment: "staging"
+  preview-production-terraform:
+    executor: docker-terraform
+    steps:
+      - terraform-preview:
+          environment: "production"
   deploy-to-development:
     executor: docker-dotnet
     steps:
@@ -232,7 +262,7 @@ jobs:
           stage: "production"
 
 workflows:
-  check:
+  feature:
     jobs:
       - check-code-formatting:
           context: api-nuget-token-context
@@ -257,14 +287,37 @@ workflows:
               ignore:
                 - master
                 - release
-      - terraform-init-and-plan-development:
+      - preview-development-terraform:
           requires:
             - assume-role-development
+      - terraform-init-and-plan-development:
+          requires:
+            - preview-development-terraform
       - terraform-compliance-development:
           requires:
             - terraform-init-and-plan-development
+      - assume-role-staging:
+          context: api-assume-role-housing-staging-context
+          filters:
+            branches:
+              ignore:
+                - master
+                - release
+      - preview-staging-terraform:
+          requires:
+            - assume-role-staging
+      - assume-role-production:
+          context: api-assume-role-housing-production-context
+          filters:
+            branches:
+              ignore:
+                - master
+                - release
+      - preview-production-terraform:
+          requires:
+            - assume-role-production
 
-  check-and-deploy-development:
+  development:
     jobs:
       - check-code-formatting:
           context: api-nuget-token-context
@@ -280,9 +333,8 @@ workflows:
               only: master
       - assume-role-development:
           context: api-assume-role-housing-development-context
-          filters:
-            branches:
-              only: master
+          requires:
+            - build-and-test
       - terraform-init-and-plan-development:
           requires:
             - assume-role-development
@@ -292,7 +344,6 @@ workflows:
       - terraform-apply-development:
           requires:
             - terraform-compliance-development
-            - build-and-test
       - deploy-to-development:
           context:
             - api-nuget-token-context
@@ -300,7 +351,7 @@ workflows:
           requires:
             - terraform-apply-development
           
-  check-and-deploy-staging-and-production:
+  staging-and-production:
       jobs:
       - check-code-formatting:
           context: api-nuget-token-context
