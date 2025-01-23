@@ -232,7 +232,7 @@ jobs:
           stage: "production"
 
 workflows:
-  check:
+  feature:
     jobs:
       - check-code-formatting:
           context: api-nuget-token-context
@@ -264,7 +264,7 @@ workflows:
           requires:
             - terraform-init-and-plan-development
 
-  check-and-deploy-development:
+  development:
     jobs:
       - check-code-formatting:
           context: api-nuget-token-context
@@ -298,7 +298,7 @@ workflows:
           requires:
             - terraform-apply-development
           
-  check-and-deploy-staging-and-production:
+  staging-and-production:
       jobs:
       - check-code-formatting:
           context: api-nuget-token-context
