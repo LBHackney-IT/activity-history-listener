@@ -287,12 +287,32 @@ workflows:
               ignore:
                 - master
                 - release
-      - terraform-init-and-plan-development:
+      - preview-development-terraform:
           requires:
             - assume-role-development
       - terraform-compliance-development:
           requires:
-            - terraform-init-and-plan-development
+            - preview-development-terraform
+      - assume-role-staging:
+          context: api-assume-role-housing-staging-context
+          filters:
+            branches:
+              ignore:
+                - master
+                - release
+      - preview-staging-terraform:
+          requires:
+            - assume-role-staging
+      - assume-role-production:
+          context: api-assume-role-housing-production-context
+          filters:
+            branches:
+              ignore:
+                - master
+                - release
+      - preview-production-terraform:
+          requires:
+            - assume-role-production
 
   development:
     jobs:
