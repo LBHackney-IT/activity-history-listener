@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   aws_assume_role: lbh-hackit/aws_assume_role@0.1.0
   sonarcloud: sonarsource/sonarcloud@2.0.0
+  node: circleci/node@6.3.0
 
 executors:
   docker-python:
@@ -109,14 +110,10 @@ commands:
       - *attach_workspace
       - checkout
       - setup_remote_docker
-      - run:
-          name: Install Node.js
-          command: |
-            curl -sL https://deb.nodesource.com/setup_14.x | bash -
-            apt-get update && apt-get install -y nodejs
+      - node/install
       - run:
           name: Install serverless CLI
-          command: npm i -g serverless@^3
+          command: npm i -g serverless
       - run:
           name: Build lambda
           command: |
@@ -297,7 +294,9 @@ workflows:
             - terraform-compliance-development
             - build-and-test
       - deploy-to-development:
-          context: api-nuget-token-context
+          context:
+            - api-nuget-token-context
+            - "Serverless Framework"
           requires:
             - terraform-apply-development
           
@@ -341,7 +340,9 @@ workflows:
             branches:
               only: release
       - deploy-to-staging:
-          context: api-nuget-token-context
+          context:
+            - api-nuget-token-context
+            - "Serverless Framework"
           requires:
             - terraform-apply-staging
           filters:
@@ -385,7 +386,9 @@ workflows:
             branches:
               only: release
       - deploy-to-production:
-          context: api-nuget-token-context
+          context:
+            - api-nuget-token-context
+            - "Serverless Framework"
           requires:
             - permit-production-release
           filters:
