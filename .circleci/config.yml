@@ -1,10 +1,9 @@
 version: 2.1
 
 orbs:
-  aws-ecr: circleci/aws-ecr@3.0.0
-  aws-cli: circleci/aws-cli@0.1.9
   aws_assume_role: lbh-hackit/aws_assume_role@0.1.0
-  sonarcloud: sonarsource/sonarcloud@1.1.1
+  sonarcloud: sonarsource/sonarcloud@2.0.0
+  node: circleci/node@6.3.0
 
 executors:
   docker-python:
@@ -15,7 +14,7 @@ executors:
       - image: "hashicorp/terraform:1.1.9"
   docker-dotnet:
     docker:
-      - image: mcr.microsoft.com/dotnet/sdk:6.0
+      - image: mcr.microsoft.com/dotnet/sdk:8.0
 
 references:
   workspace_root: &workspace_root "~"
@@ -85,6 +84,21 @@ commands:
           root: *workspace_root
           paths:
             - .aws
+  terraform-preview:
+    description: "Gives a preview for Terraform configuration changes."
+    parameters:
+      environment:
+        type: string
+    steps:
+      - *attach_workspace
+      - checkout
+      - run:
+          command: |
+            cd ./terraform/<<parameters.environment>>/
+            terraform get -update=true
+            terraform init
+            terraform plan
+          name: terraform preview
   terraform-apply:
     description: "Runs Terraform Apply"
     parameters:
@@ -111,14 +125,10 @@ commands:
       - *attach_workspace
       - checkout
       - setup_remote_docker
-      - run:
-          name: Install Node.js
-          command: |
-            curl -sL https://deb.nodesource.com/setup_14.x | bash -
-            apt-get update && apt-get install -y nodejs
+      - node/install
       - run:
           name: Install serverless CLI
-          command: npm i -g serverless@^3
+          command: npm i -g serverless
       - run:
           name: Build lambda
           command: |
@@ -153,6 +163,13 @@ jobs:
       - run:
           name: Run tests
           command: docker-compose run activity-listener-test
+      - run:
+          name: Report
+          command: |
+            mkdir coverage
+            docker cp $(docker ps -aqf "name=activity-listener-test"):/app/coverage ./
+            sed -i "s|/app/|$(pwd)/|g" coverage/*/coverage.opencover.xml
+      - sonarcloud/scan
   assume-role-development:
     executor: docker-python
     steps:
@@ -213,6 +230,21 @@ jobs:
     steps:
       - terraform-apply:
           environment: "production"
+  preview-development-terraform:
+    executor: docker-terraform
+    steps:
+      - terraform-preview:
+          environment: "development"
+  preview-staging-terraform:
+    executor: docker-terraform
+    steps:
+      - terraform-preview:
+          environment: "staging"
+  preview-production-terraform:
+    executor: docker-terraform
+    steps:
+      - terraform-preview:
+          environment: "production"
   deploy-to-development:
     executor: docker-dotnet
     steps:
@@ -230,7 +262,7 @@ jobs:
           stage: "production"
 
 workflows:
-  check:
+  feature:
     jobs:
       - check-code-formatting:
           context: api-nuget-token-context
@@ -255,14 +287,37 @@ workflows:
               ignore:
                 - master
                 - release
-      - terraform-init-and-plan-development:
+      - preview-development-terraform:
           requires:
             - assume-role-development
+      - terraform-init-and-plan-development:
+          requires:
+            - preview-development-terraform
       - terraform-compliance-development:
           requires:
             - terraform-init-and-plan-development
+      - assume-role-staging:
+          context: api-assume-role-housing-staging-context
+          filters:
+            branches:
+              ignore:
+                - master
+                - release
+      - preview-staging-terraform:
+          requires:
+            - assume-role-staging
+      - assume-role-production:
+          context: api-assume-role-housing-production-context
+          filters:
+            branches:
+              ignore:
+                - master
+                - release
+      - preview-production-terraform:
+          requires:
+            - assume-role-production
 
-  check-and-deploy-development:
+  development:
     jobs:
       - check-code-formatting:
           context: api-nuget-token-context
@@ -278,9 +333,8 @@ workflows:
               only: master
       - assume-role-development:
           context: api-assume-role-housing-development-context
-          filters:
-            branches:
-              only: master
+          requires:
+            - build-and-test
       - terraform-init-and-plan-development:
           requires:
             - assume-role-development
@@ -290,13 +344,14 @@ workflows:
       - terraform-apply-development:
           requires:
             - terraform-compliance-development
-            - build-and-test
       - deploy-to-development:
-          context: api-nuget-token-context
+          context:
+            - api-nuget-token-context
+            - "Serverless Framework"
           requires:
             - terraform-apply-development
           
-  check-and-deploy-staging-and-production:
+  staging-and-production:
       jobs:
       - check-code-formatting:
           context: api-nuget-token-context
@@ -336,7 +391,9 @@ workflows:
             branches:
               only: release
       - deploy-to-staging:
-          context: api-nuget-token-context
+          context:
+            - api-nuget-token-context
+            - "Serverless Framework"
           requires:
             - terraform-apply-staging
           filters:
@@ -380,7 +437,9 @@ workflows:
             branches:
               only: release
       - deploy-to-production:
-          context: api-nuget-token-context
+          context:
+            - api-nuget-token-context
+            - "Serverless Framework"
           requires:
             - permit-production-release
           filters:
