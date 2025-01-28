@@ -38,6 +38,11 @@ terraform {
   }
 }
 
+data "aws_vpc" "development_vpc" {
+  tags = {
+    Name = "housing-dev"
+  }
+}
 
 data "aws_ssm_parameter" "asset_sns_topic_arn" {
   name = "/sns-topic/development/asset/arn"
