@@ -38,7 +38,7 @@ terraform {
   }
 }
 
-data "aws_vpc" "development_vpc" {
+data "aws_vpc" "housing_development_vpc" {
   tags = {
     Name = "housing-dev"
   }
