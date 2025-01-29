@@ -37,6 +37,12 @@ terraform {
   }
 }
 
+data "aws_vpc" "housing_production_vpc" {
+  tags = {
+    Name = "housing-prod"
+  }
+}
+
 data "aws_ssm_parameter" "asset_sns_topic_arn" {
   name = "/sns-topic/production/asset/arn"
 }
