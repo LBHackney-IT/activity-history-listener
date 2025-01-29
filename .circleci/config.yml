@@ -8,7 +8,7 @@ orbs:
 executors:
   docker-python:
     docker:
-      - image: cimg/python:3.11.1
+      - image: cimg/python:3.12
   docker-terraform:
     docker:
       - image: "hashicorp/terraform:1.1.9"
@@ -159,10 +159,10 @@ jobs:
       - setup_remote_docker
       - run:
           name: build
-          command: docker-compose build activity-listener-test
+          command: docker compose build activity-listener-test
       - run:
           name: Run tests
-          command: docker-compose run activity-listener-test
+          command: docker compose run activity-listener-test
       - run:
           name: Report
           command: |
