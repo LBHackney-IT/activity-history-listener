@@ -37,6 +37,12 @@ terraform {
   }
 }
 
+data "aws_vpc" "housing_staging_vpc" {
+  tags = {
+    Name = "housing-stg"
+  }
+}
+
 data "aws_ssm_parameter" "asset_sns_topic_arn" {
   name = "/sns-topic/staging/asset/arn"
 }
