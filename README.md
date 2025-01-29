@@ -4,7 +4,7 @@ Listener application implementing an AWS function to receive messages that will 
 ## Implementation
 This application subscribes to all of the SNS topics for housing solutions related events.
 
-It records to the 'ActivityHistory' DynamoDB table the occurence of each event that was published tosome SNS topic for other listener applications to consume.
+It records to the 'ActivityHistory' DynamoDB table the occurence of each event that was published an SNS topic for other listener applications to consume.
 
 ## What for?
 These events are recorded to 'ActivityHistory' table:
