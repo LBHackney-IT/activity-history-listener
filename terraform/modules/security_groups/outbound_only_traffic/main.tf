@@ -1,4 +1,4 @@
-resource "aws_security_group" "activity_listener_sg" {
+resource "aws_security_group" "outbound_traffic_sg" {
   vpc_id = var.vpc_id
   name_prefix = "activity_listener_outgoing_traffic"
   description = "SG used to hook activity listener lambda into VPC. No incoming traffic allowed, all outgoing traffic allowed."
