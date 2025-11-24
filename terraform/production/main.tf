@@ -30,7 +30,7 @@ locals {
 
 terraform {
   backend "s3" {
-    bucket  = "terraform-state-housing-production"
+    bucket  = "terraform-state-disaster-recovery"
     encrypt = true
     region  = "eu-west-2"
     key     = "services/activity-listener/state"
@@ -39,7 +39,7 @@ terraform {
 
 data "aws_vpc" "housing_production_vpc" {
   tags = {
-    Name = "housing-prod"
+    Name = "disaster-recovery-prod"
   }
 }
 
@@ -49,50 +49,50 @@ module "activity_listener_sg" {
   user_resource_name  = "activity_listener"
   environment_name    = var.environment_name
 }
-
-data "aws_ssm_parameter" "asset_sns_topic_arn" {
-  name = "/sns-topic/production/asset/arn"
-}
-
-data "aws_ssm_parameter" "contract_sns_topic_arn" {
-  name = "/sns-topic/production/contracts/arn"
-}
-
-data "aws_ssm_parameter" "person_sns_topic_arn" {
-  name = "/sns-topic/production/person/arn"
-}
-
-data "aws_ssm_parameter" "contact_details_sns_topic_arn" {
-  name = "/sns-topic/production/contact_details/arn"
-}
-
-data "aws_ssm_parameter" "tenure_sns_topic_arn" {
-  name = "/sns-topic/production/tenure/arn"
-}
-
-data "aws_ssm_parameter" "housingregister_sns_topic_arn" {
-  name = "/sns-topic/production/housingregister/arn"
-}
-
-data "aws_ssm_parameter" "equality_information_sns_topic_arn" {
-  name = "/sns-topic/production/equalityInformation/arn"
-}
-
-data "aws_ssm_parameter" "processes_sns_topic_arn" {
-  name = "/sns-topic/production/processes/arn"
-}
-
-data "aws_ssm_parameter" "notes_sns_topic_arn" {
-  name = "/sns-topic/production/notes/arn"
-}
-
-data "aws_ssm_parameter" "cautionary_alerts_sns_topic_arn" {
-  name = "/sns-topic/production/cautionary_alerts/arn"
-}
-
-data "aws_ssm_parameter" "patches_and_areas_sns_topic_arn" {
-  name = "/sns-topic/production/patches-and-areas/arn"
-}
+#
+# data "aws_ssm_parameter" "asset_sns_topic_arn" {
+#   name = "/sns-topic/production/asset/arn"
+# }
+#
+# data "aws_ssm_parameter" "contract_sns_topic_arn" {
+#   name = "/sns-topic/production/contracts/arn"
+# }
+#
+# data "aws_ssm_parameter" "person_sns_topic_arn" {
+#   name = "/sns-topic/production/person/arn"
+# }
+#
+# data "aws_ssm_parameter" "contact_details_sns_topic_arn" {
+#   name = "/sns-topic/production/contact_details/arn"
+# }
+#
+# data "aws_ssm_parameter" "tenure_sns_topic_arn" {
+#   name = "/sns-topic/production/tenure/arn"
+# }
+#
+# data "aws_ssm_parameter" "housingregister_sns_topic_arn" {
+#   name = "/sns-topic/production/housingregister/arn"
+# }
+#
+# data "aws_ssm_parameter" "equality_information_sns_topic_arn" {
+#   name = "/sns-topic/production/equalityInformation/arn"
+# }
+#
+# data "aws_ssm_parameter" "processes_sns_topic_arn" {
+#   name = "/sns-topic/production/processes/arn"
+# }
+#
+# data "aws_ssm_parameter" "notes_sns_topic_arn" {
+#   name = "/sns-topic/production/notes/arn"
+# }
+#
+# data "aws_ssm_parameter" "cautionary_alerts_sns_topic_arn" {
+#   name = "/sns-topic/production/cautionary_alerts/arn"
+# }
+#
+# data "aws_ssm_parameter" "patches_and_areas_sns_topic_arn" {
+#   name = "/sns-topic/production/patches-and-areas/arn"
+# }
 
 resource "aws_sqs_queue" "activity_history_dead_letter_queue" {
   name                              = "activityhistorydeadletterqueue.fifo"
@@ -180,7 +180,7 @@ resource "aws_sqs_queue_policy" "activity_history_queue_policy" {
                       "aws:SourceArn": "${data.aws_ssm_parameter.housingregister_sns_topic_arn.value}"
                   }
               }
-          },          
+          },
           {
               "Sid": "Sixth",
               "Effect": "Allow",
@@ -258,54 +258,54 @@ resource "aws_sqs_queue_policy" "activity_history_queue_policy" {
   POLICY
 }
 
-resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_person_sns" {
-  topic_arn            = data.aws_ssm_parameter.person_sns_topic_arn.value
-  protocol             = "sqs"
-  endpoint             = aws_sqs_queue.activity_history_queue.arn
-  raw_message_delivery = true
-}
-
-resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_contact_details_sns" {
-  topic_arn            = data.aws_ssm_parameter.contact_details_sns_topic_arn.value
-  protocol             = "sqs"
-  endpoint             = aws_sqs_queue.activity_history_queue.arn
-  raw_message_delivery = true
-}
-
-resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_tenure_sns" {
-  topic_arn            = data.aws_ssm_parameter.tenure_sns_topic_arn.value
-  protocol             = "sqs"
-  endpoint             = aws_sqs_queue.activity_history_queue.arn
-  raw_message_delivery = true
-}
-
- resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_housingregister_sns" {
-   topic_arn            = data.aws_ssm_parameter.housingregister_sns_topic_arn.value
-   protocol             = "sqs"
-   endpoint             = aws_sqs_queue.activity_history_queue.arn
-   raw_message_delivery = true
- }
-
-resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_equality_information_sns" {
-  topic_arn            = data.aws_ssm_parameter.equality_information_sns_topic_arn.value
-  protocol             = "sqs"
-  endpoint             = aws_sqs_queue.activity_history_queue.arn
-  raw_message_delivery = true
-}
-
-resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_processes_sns" {
-  topic_arn            = data.aws_ssm_parameter.processes_sns_topic_arn.value
-  protocol             = "sqs"
-  endpoint             = aws_sqs_queue.activity_history_queue.arn
-  raw_message_delivery = true
-}
-
-resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_notes_sns" {
-  topic_arn            = data.aws_ssm_parameter.notes_sns_topic_arn.value
-  protocol             = "sqs"
-  endpoint             = aws_sqs_queue.activity_history_queue.arn
-  raw_message_delivery = true
-}
+# resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_person_sns" {
+#   topic_arn            = data.aws_ssm_parameter.person_sns_topic_arn.value
+#   protocol             = "sqs"
+#   endpoint             = aws_sqs_queue.activity_history_queue.arn
+#   raw_message_delivery = true
+# }
+#
+# resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_contact_details_sns" {
+#   topic_arn            = data.aws_ssm_parameter.contact_details_sns_topic_arn.value
+#   protocol             = "sqs"
+#   endpoint             = aws_sqs_queue.activity_history_queue.arn
+#   raw_message_delivery = true
+# }
+#
+# resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_tenure_sns" {
+#   topic_arn            = data.aws_ssm_parameter.tenure_sns_topic_arn.value
+#   protocol             = "sqs"
+#   endpoint             = aws_sqs_queue.activity_history_queue.arn
+#   raw_message_delivery = true
+# }
+#
+#  resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_housingregister_sns" {
+#    topic_arn            = data.aws_ssm_parameter.housingregister_sns_topic_arn.value
+#    protocol             = "sqs"
+#    endpoint             = aws_sqs_queue.activity_history_queue.arn
+#    raw_message_delivery = true
+#  }
+#
+# resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_equality_information_sns" {
+#   topic_arn            = data.aws_ssm_parameter.equality_information_sns_topic_arn.value
+#   protocol             = "sqs"
+#   endpoint             = aws_sqs_queue.activity_history_queue.arn
+#   raw_message_delivery = true
+# }
+#
+# resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_processes_sns" {
+#   topic_arn            = data.aws_ssm_parameter.processes_sns_topic_arn.value
+#   protocol             = "sqs"
+#   endpoint             = aws_sqs_queue.activity_history_queue.arn
+#   raw_message_delivery = true
+# }
+#
+# resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_notes_sns" {
+#   topic_arn            = data.aws_ssm_parameter.notes_sns_topic_arn.value
+#   protocol             = "sqs"
+#   endpoint             = aws_sqs_queue.activity_history_queue.arn
+#   raw_message_delivery = true
+# }
 
 resource "aws_ssm_parameter" "activity_history_sqs_queue_arn" {
   name  = "/sqs-queue/production/activity-history/arn"
@@ -313,38 +313,38 @@ resource "aws_ssm_parameter" "activity_history_sqs_queue_arn" {
   value = aws_sqs_queue.activity_history_queue.arn
 }
 
-resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_asset_sns" {
-  topic_arn            = data.aws_ssm_parameter.asset_sns_topic_arn.value
-  protocol             = "sqs"
-  endpoint             = aws_sqs_queue.activity_history_queue.arn
-  raw_message_delivery = true
-}
-
-resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_contract_sns" {
-  topic_arn            = data.aws_ssm_parameter.contract_sns_topic_arn.value
-  protocol             = "sqs"
-  endpoint             = aws_sqs_queue.activity_history_queue.arn
-  raw_message_delivery = true
-}
-
-resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_cautionary_alerts_sns" {
-  topic_arn            = data.aws_ssm_parameter.cautionary_alerts_sns_topic_arn.value
-  protocol             = "sqs"
-  endpoint             = aws_sqs_queue.activity_history_queue.arn
-  raw_message_delivery = true
-}
-
-resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_patches_and_areas_sns" {
-  topic_arn            = data.aws_ssm_parameter.patches_and_areas_sns_topic_arn.value
-  protocol             = "sqs"
-  endpoint             = aws_sqs_queue.activity_history_queue.arn
-  raw_message_delivery = true
-}
-
-module "activity_history_listener_cw_dashboard" {
-  source                     = "github.com/LBHackney-IT/aws-hackney-common-terraform.git//modules/cloudwatch/dashboards/listener-dashboard"
-  environment_name           = var.environment_name
-  listener_name              = "activity-listener"
-  sqs_queue_name             = aws_sqs_queue.activity_history_queue.name
-  sqs_dead_letter_queue_name = aws_sqs_queue.activity_history_dead_letter_queue.name
-}
+# resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_asset_sns" {
+#   topic_arn            = data.aws_ssm_parameter.asset_sns_topic_arn.value
+#   protocol             = "sqs"
+#   endpoint             = aws_sqs_queue.activity_history_queue.arn
+#   raw_message_delivery = true
+# }
+#
+# resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_contract_sns" {
+#   topic_arn            = data.aws_ssm_parameter.contract_sns_topic_arn.value
+#   protocol             = "sqs"
+#   endpoint             = aws_sqs_queue.activity_history_queue.arn
+#   raw_message_delivery = true
+# }
+#
+# resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_cautionary_alerts_sns" {
+#   topic_arn            = data.aws_ssm_parameter.cautionary_alerts_sns_topic_arn.value
+#   protocol             = "sqs"
+#   endpoint             = aws_sqs_queue.activity_history_queue.arn
+#   raw_message_delivery = true
+# }
+#
+# resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_patches_and_areas_sns" {
+#   topic_arn            = data.aws_ssm_parameter.patches_and_areas_sns_topic_arn.value
+#   protocol             = "sqs"
+#   endpoint             = aws_sqs_queue.activity_history_queue.arn
+#   raw_message_delivery = true
+# }
+#
+# module "activity_history_listener_cw_dashboard" {
+#   source                     = "github.com/LBHackney-IT/aws-hackney-common-terraform.git//modules/cloudwatch/dashboards/listener-dashboard"
+#   environment_name           = var.environment_name
+#   listener_name              = "activity-listener"
+#   sqs_queue_name             = aws_sqs_queue.activity_history_queue.name
+#   sqs_dead_letter_queue_name = aws_sqs_queue.activity_history_dead_letter_queue.name
+# }
