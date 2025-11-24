@@ -169,9 +169,9 @@ jobs:
             mkdir coverage
             docker cp $(docker ps -aqf "name=activity-listener-test"):/app/coverage ./
             sed -i "s|/app/|$(pwd)/|g" coverage/*/coverage.opencover.xml
-      - sonarcloud/scan
-  assume-role-development:
-    executor: docker-python
+#      - sonarcloud/scan
+#  assume-role-development:
+#    executor: docker-python
 #    steps:
 #      - assume-role-and-persist-workspace:
 #          aws-account: $AWS_ACCOUNT_DEVELOPMENT
