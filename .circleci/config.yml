@@ -260,31 +260,31 @@ jobs:
     steps:
       - deploy-lambda:
           stage: "production"
-  assume-role-pre-production:
-    executor: docker-python
-    steps:
-      - assume-role-and-persist-workspace:
-          aws-account: $AWS_ACCOUNT_PRE_PRODUCTION
-  terraform-init-and-plan-pre-production:
-    executor: docker-terraform
-    steps:
-      - terraform-init-then-plan:
-          environment: "pre-production"
-  terraform-compliance-pre-production:
-    executor: docker-terraform
-    steps:
-      - terraform-compliance:
-          environment: "pre-production"
-  terraform-apply-pre-production:
-    executor: docker-terraform
-    steps:
-      - terraform-apply:
-          environment: "pre-production"
-  deploy-to-pre-production:
-    executor: docker-dotnet
-    steps:
-      - deploy-lambda:
-          stage: "pre-production"
+#  assume-role-pre-production:
+#    executor: docker-python
+#    steps:
+#      - assume-role-and-persist-workspace:
+#          aws-account: $AWS_ACCOUNT_PRE_PRODUCTION
+#  terraform-init-and-plan-pre-production:
+#    executor: docker-terraform
+#    steps:
+#      - terraform-init-then-plan:
+#          environment: "pre-production"
+#  terraform-compliance-pre-production:
+#    executor: docker-terraform
+#    steps:
+#      - terraform-compliance:
+#          environment: "pre-production"
+#  terraform-apply-pre-production:
+#    executor: docker-terraform
+#    steps:
+#      - terraform-apply:
+#          environment: "pre-production"
+#  deploy-to-pre-production:
+#    executor: docker-dotnet
+#    steps:
+#      - deploy-lambda:
+#          stage: "pre-production"
 
 workflows:
   feature:
@@ -333,10 +333,9 @@ workflows:
 #            - assume-role-staging
       - assume-role-production:
           context: api-assume-role-disaster-recovery-context
-          branches:
-              ignore:
-                - master
-                - release
+          filters:
+            branches:
+              only: disasterRecovery
       - preview-production-terraform:
           requires:
             - assume-role-production
