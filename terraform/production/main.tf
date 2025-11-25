@@ -114,149 +114,149 @@ resource "aws_sqs_queue" "activity_history_queue" {
   })
 }
 
-resource "aws_sqs_queue_policy" "activity_history_queue_policy" {
-  queue_url = aws_sqs_queue.activity_history_queue.id
-  policy    = <<POLICY
-  {
-      "Version": "2012-10-17",
-      "Id": "sqspolicy",
-      "Statement": [
-          {
-              "Sid": "First",
-              "Effect": "Allow",
-              "Principal": "*",
-              "Action": "sqs:SendMessage",
-              "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
-              "Condition": {
-                  "ArnEquals": {
-                      "aws:SourceArn": "${data.aws_ssm_parameter.person_sns_topic_arn.value}"
-                  }
-              }
-          },
-          {
-              "Sid": "Second",
-              "Effect": "Allow",
-              "Principal": "*",
-              "Action": "sqs:SendMessage",
-              "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
-              "Condition": {
-                  "ArnEquals": {
-                      "aws:SourceArn": "${data.aws_ssm_parameter.contact_details_sns_topic_arn.value}"
-                  }
-              }
-          },
-          {
-              "Sid": "Third",
-              "Effect": "Allow",
-              "Principal": "*",
-              "Action": "sqs:SendMessage",
-              "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
-              "Condition": {
-                  "ArnEquals": {
-                      "aws:SourceArn": "${data.aws_ssm_parameter.tenure_sns_topic_arn.value}"
-                  }
-              }
-          },
-          {
-              "Sid": "Fourth",
-              "Effect": "Allow",
-              "Principal": "*",
-              "Action": "sqs:SendMessage",
-              "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
-              "Condition": {
-                  "ArnEquals": {
-                      "aws:SourceArn": "${data.aws_ssm_parameter.equality_information_sns_topic_arn.value}"
-                  }
-              }
-          },
-          {
-              "Sid": "Fifth",
-              "Effect": "Allow",
-              "Principal": "*",
-              "Action": "sqs:SendMessage",
-              "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
-              "Condition": {
-                  "ArnEquals": {
-                      "aws:SourceArn": "${data.aws_ssm_parameter.housingregister_sns_topic_arn.value}"
-                  }
-              }
-          },
-          {
-              "Sid": "Sixth",
-              "Effect": "Allow",
-              "Principal": "*",
-              "Action": "sqs:SendMessage",
-              "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
-              "Condition": {
-                  "ArnEquals": {
-                      "aws:SourceArn": "${data.aws_ssm_parameter.processes_sns_topic_arn.value}"
-                  }
-              }
-          },
-          {
-              "Sid": "Seventh",
-              "Effect": "Allow",
-              "Principal": "*",
-              "Action": "sqs:SendMessage",
-              "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
-              "Condition": {
-                  "ArnEquals": {
-                      "aws:SourceArn": "${data.aws_ssm_parameter.notes_sns_topic_arn.value}"
-                  }
-              }
-          },
-          {
-              "Sid": "Eighth",
-              "Effect": "Allow",
-              "Principal": "*",
-              "Action": "sqs:SendMessage",
-              "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
-              "Condition": {
-                  "ArnEquals": {
-                      "aws:SourceArn": "${data.aws_ssm_parameter.asset_sns_topic_arn.value}"
-                  }
-              }
-          },
-          {
-              "Sid": "Ninth",
-              "Effect": "Allow",
-              "Principal": "*",
-              "Action": "sqs:SendMessage",
-              "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
-              "Condition": {
-                  "ArnEquals": {
-                      "aws:SourceArn": "${data.aws_ssm_parameter.contract_sns_topic_arn.value}"
-                  }
-              }
-          },
-          {
-              "Sid": "Tenth",
-              "Effect": "Allow",
-              "Principal": "*",
-              "Action": "sqs:SendMessage",
-              "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
-              "Condition": {
-                  "ArnEquals": {
-                      "aws:SourceArn": "${data.aws_ssm_parameter.cautionary_alerts_sns_topic_arn.value}"
-                  }
-              }
-          },
-          {
-              "Sid": "Eleventh",
-              "Effect": "Allow",
-              "Principal": "*",
-              "Action": "sqs:SendMessage",
-              "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
-              "Condition": {
-                  "ArnEquals": {
-                      "aws:SourceArn": "${data.aws_ssm_parameter.patches_and_areas_sns_topic_arn.value}"
-                  }
-              }
-          }
-      ]
-  }
-  POLICY
-}
+# resource "aws_sqs_queue_policy" "activity_history_queue_policy" {
+#   queue_url = aws_sqs_queue.activity_history_queue.id
+#   policy    = <<POLICY
+#   {
+#       "Version": "2012-10-17",
+#       "Id": "sqspolicy",
+#       "Statement": [
+#           {
+#               "Sid": "First",
+#               "Effect": "Allow",
+#               "Principal": "*",
+#               "Action": "sqs:SendMessage",
+#               "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+#               "Condition": {
+#                   "ArnEquals": {
+#                       "aws:SourceArn": "${data.aws_ssm_parameter.person_sns_topic_arn.value}"
+#                   }
+#               }
+#           },
+#           {
+#               "Sid": "Second",
+#               "Effect": "Allow",
+#               "Principal": "*",
+#               "Action": "sqs:SendMessage",
+#               "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+#               "Condition": {
+#                   "ArnEquals": {
+#                       "aws:SourceArn": "${data.aws_ssm_parameter.contact_details_sns_topic_arn.value}"
+#                   }
+#               }
+#           },
+#           {
+#               "Sid": "Third",
+#               "Effect": "Allow",
+#               "Principal": "*",
+#               "Action": "sqs:SendMessage",
+#               "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+#               "Condition": {
+#                   "ArnEquals": {
+#                       "aws:SourceArn": "${data.aws_ssm_parameter.tenure_sns_topic_arn.value}"
+#                   }
+#               }
+#           },
+#           {
+#               "Sid": "Fourth",
+#               "Effect": "Allow",
+#               "Principal": "*",
+#               "Action": "sqs:SendMessage",
+#               "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+#               "Condition": {
+#                   "ArnEquals": {
+#                       "aws:SourceArn": "${data.aws_ssm_parameter.equality_information_sns_topic_arn.value}"
+#                   }
+#               }
+#           },
+#           {
+#               "Sid": "Fifth",
+#               "Effect": "Allow",
+#               "Principal": "*",
+#               "Action": "sqs:SendMessage",
+#               "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+#               "Condition": {
+#                   "ArnEquals": {
+#                       "aws:SourceArn": "${data.aws_ssm_parameter.housingregister_sns_topic_arn.value}"
+#                   }
+#               }
+#           },
+#           {
+#               "Sid": "Sixth",
+#               "Effect": "Allow",
+#               "Principal": "*",
+#               "Action": "sqs:SendMessage",
+#               "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+#               "Condition": {
+#                   "ArnEquals": {
+#                       "aws:SourceArn": "${data.aws_ssm_parameter.processes_sns_topic_arn.value}"
+#                   }
+#               }
+#           },
+#           {
+#               "Sid": "Seventh",
+#               "Effect": "Allow",
+#               "Principal": "*",
+#               "Action": "sqs:SendMessage",
+#               "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+#               "Condition": {
+#                   "ArnEquals": {
+#                       "aws:SourceArn": "${data.aws_ssm_parameter.notes_sns_topic_arn.value}"
+#                   }
+#               }
+#           },
+#           {
+#               "Sid": "Eighth",
+#               "Effect": "Allow",
+#               "Principal": "*",
+#               "Action": "sqs:SendMessage",
+#               "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+#               "Condition": {
+#                   "ArnEquals": {
+#                       "aws:SourceArn": "${data.aws_ssm_parameter.asset_sns_topic_arn.value}"
+#                   }
+#               }
+#           },
+#           {
+#               "Sid": "Ninth",
+#               "Effect": "Allow",
+#               "Principal": "*",
+#               "Action": "sqs:SendMessage",
+#               "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+#               "Condition": {
+#                   "ArnEquals": {
+#                       "aws:SourceArn": "${data.aws_ssm_parameter.contract_sns_topic_arn.value}"
+#                   }
+#               }
+#           },
+#           {
+#               "Sid": "Tenth",
+#               "Effect": "Allow",
+#               "Principal": "*",
+#               "Action": "sqs:SendMessage",
+#               "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+#               "Condition": {
+#                   "ArnEquals": {
+#                       "aws:SourceArn": "${data.aws_ssm_parameter.cautionary_alerts_sns_topic_arn.value}"
+#                   }
+#               }
+#           },
+#           {
+#               "Sid": "Eleventh",
+#               "Effect": "Allow",
+#               "Principal": "*",
+#               "Action": "sqs:SendMessage",
+#               "Resource": "${aws_sqs_queue.activity_history_queue.arn}",
+#               "Condition": {
+#                   "ArnEquals": {
+#                       "aws:SourceArn": "${data.aws_ssm_parameter.patches_and_areas_sns_topic_arn.value}"
+#                   }
+#               }
+#           }
+#       ]
+#   }
+#   POLICY
+# }
 
 # resource "aws_sns_topic_subscription" "activity_history_queue_subscribe_to_person_sns" {
 #   topic_arn            = data.aws_ssm_parameter.person_sns_topic_arn.value
