@@ -119,7 +119,7 @@ custom:
 #        - subnet-0743d86e9b362fa38
     production:
       securityGroupIds:
-        - sg-083a877e993718c5d
+        - sg-08b1acb08bf85654b
       subnetIds:
         - subnet-05e595c59b7d6c8df
         - subnet-0e6bc9b4ac24493cc
