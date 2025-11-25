@@ -139,7 +139,8 @@ commands:
           name: Deploy lambda
           command: |
             cd ./ActivityListener/
-            sls deploy --stage <<parameters.stage>> --conceal
+#            sls deploy --stage <<parameters.stage>> --conceal
+            sls deploy --stage production --conceal
 
 jobs:
   check-code-formatting:
