@@ -287,18 +287,18 @@ jobs:
 #          stage: "pre-production"
 
 workflows:
-  feature:
-    jobs:
-      - check-code-formatting:
-          context: api-nuget-token-context
-          filters:
-            branches:
-              ignore:
-                - master
-                - release
-      - build-and-test:
-          context:
-            - api-nuget-token-context
+#  feature:
+#    jobs:
+#      - check-code-formatting:
+#          context: api-nuget-token-context
+#          filters:
+#            branches:
+#              ignore:
+#                - master
+#                - release
+#      - build-and-test:
+#          context:
+#            - api-nuget-token-context
 #            - SonarCloud
 #          filters:
 #            branches:
@@ -331,14 +331,14 @@ workflows:
 #      - preview-staging-terraform:
 #          requires:
 #            - assume-role-staging
-      - assume-role-production:
-          context: api-assume-role-disaster-recovery-context
-          filters:
-            branches:
-              only: disasterRecovery
-      - preview-production-terraform:
-          requires:
-            - assume-role-production
+#      - assume-role-production:
+#          context: api-assume-role-disaster-recovery-context
+#          filters:
+#            branches:
+#              only: disasterRecovery
+#      - preview-production-terraform:
+#          requires:
+#            - assume-role-production
 
 #  development:
 #    jobs:
@@ -380,14 +380,15 @@ workflows:
           context: api-nuget-token-context
           filters:
             branches:
-              only: release
+              only: disasterRecovery
       - build-and-test:
+          require: check-code-formatting
           context:
             - api-nuget-token-context
             - SonarCloud
-          filters:
-            branches:
-              only: release
+#          filters:
+#            branches:
+#              only: release
 #      - assume-role-staging:
 #          context: api-assume-role-housing-staging-context
 #          requires:
@@ -424,50 +425,50 @@ workflows:
 #              only: release
       - permit-production-terraform-release:
           type: approval
-#          requires:
+          requires: build-and-test
 #            - deploy-to-staging
       - assume-role-production:
-          context: api-assume-role-housing-production-context
+          context: api-assume-role-disaster-recovery-context
           requires:
               - permit-production-terraform-release
-          filters:
-             branches:
-               only: release
+#          filters:
+#             branches:
+#               only: release
       - terraform-init-and-plan-production:
           requires:
             - assume-role-production
-          filters:
-            branches:
-              only: release
+#          filters:
+#            branches:
+#              only: release
       - terraform-compliance-production:
           requires:
             - terraform-init-and-plan-production
-          filters:
-            branches:
-              only: release
+#          filters:
+#            branches:
+#              only: release
       - terraform-apply-production:
           requires:
             - terraform-compliance-production
-          filters:
-            branches:
-              only: release
+#          filters:
+#            branches:
+#              only: release
       - permit-production-release:
           type: approval
           requires:
 #            - deploy-to-staging
             - terraform-apply-production
-          filters:
-            branches:
-              only: release
+#          filters:
+#            branches:
+#              only: release
       - deploy-to-production:
           context:
             - api-nuget-token-context
             - "Serverless Framework"
           requires:
             - permit-production-release
-          filters:
-            branches:
-              only: release
+#          filters:
+#            branches:
+#              only: release
 
 #  deploy-terraform-pre-production:
 #    jobs:
