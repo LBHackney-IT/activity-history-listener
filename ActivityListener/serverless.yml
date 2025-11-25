@@ -105,27 +105,27 @@ resources:
 
 custom:
   vpc:
-    development:
-      securityGroupIds:
-        - sg-0dd956af4deb3df1e
-      subnetIds:
-        - subnet-0140d06fb84fdb547
-        - subnet-05ce390ba88c42bfd
-    staging:
-      securityGroupIds:
-        - sg-01f4442b04bfce797
-      subnetIds:
-        - subnet-0ea0020a44b98a2ca
-        - subnet-0743d86e9b362fa38
+#    development:
+#      securityGroupIds:
+#        - sg-0dd956af4deb3df1e
+#      subnetIds:
+#        - subnet-0140d06fb84fdb547
+#        - subnet-05ce390ba88c42bfd
+#    staging:
+#      securityGroupIds:
+#        - sg-01f4442b04bfce797
+#      subnetIds:
+#        - subnet-0ea0020a44b98a2ca
+#        - subnet-0743d86e9b362fa38
     production:
       securityGroupIds:
-        - sg-08b1acb08bf85654b
+        - sg-083a877e993718c5d
       subnetIds:
         - subnet-05e595c59b7d6c8df
         - subnet-0e6bc9b4ac24493cc
-    pre-production:
-      securityGroupIds:
-        - sg-05528439548f2f9e7
-      subnetIds:
-        - subnet-08aa35159a8706faa
-        - subnet-0b848c5b14f841dfb
+#    pre-production:
+#      securityGroupIds:
+#        - sg-05528439548f2f9e7
+#      subnetIds:
+#        - subnet-08aa35159a8706faa
+#        - subnet-0b848c5b14f841dfb
