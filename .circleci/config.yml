@@ -383,8 +383,10 @@ workflows:
               only:
               - disasterRecovery
       - build-and-test:
-          require:
-           - check-code-formatting
+          filters:
+            branches:
+              only:
+                - disasterRecovery
           context:
             - api-nuget-token-context
             - SonarCloud
