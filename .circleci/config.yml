@@ -380,9 +380,11 @@ workflows:
           context: api-nuget-token-context
           filters:
             branches:
-              only: disasterRecovery
+              only:
+              - disasterRecovery
       - build-and-test:
-          require: check-code-formatting
+          require:
+           - check-code-formatting
           context:
             - api-nuget-token-context
             - SonarCloud
@@ -425,7 +427,8 @@ workflows:
 #              only: release
       - permit-production-terraform-release:
           type: approval
-          requires: build-and-test
+          requires:
+             - build-and-test
 #            - deploy-to-staging
       - assume-role-production:
           context: api-assume-role-disaster-recovery-context
