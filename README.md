@@ -1,18 +1,17 @@
 # Activity History Listener
 
-.NET 10 AWS Lambda that consumes housing-solution events from SQS (published via SNS) and writes an activity log to the DynamoDB `ActivityHistory` table. The log supports audit lookup and debugging of failed or missing events.
+.NET 10 AWS Lambda that consumes housing-solution events from SQS (published via SNS) and writes an activity log to the DynamoDB `ActivityHistory` table. This provides an audit logs for any events on MMH.
 
 ## Tech stack
 
-- .NET 10 (`net10.0`, AWS Lambda `dotnet10`)
+- .NET 10
 - Amazon SQS / SNS
 - DynamoDB, with DynamoDB Local for local development
 - AWS X-Ray
 
 ## Layout
 
-One listener project, organised in layers:
-
+Layers:
 - `ActivityListener/Boundary` — event contracts
 - `ActivityListener/UseCase` — message processing
 - `ActivityListener/Gateway` — DynamoDB access
