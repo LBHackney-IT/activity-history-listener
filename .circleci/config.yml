@@ -156,7 +156,7 @@ jobs:
     executor: docker-python
     steps:
       - checkout:
-        method: full
+          method: full
       - setup_remote_docker
       - run:
           name: build
