@@ -155,10 +155,7 @@ jobs:
   build-and-test:
     executor: docker-python
     steps:
-      - checkout
-      - run:
-          name: Ensure full git history for SonarCloud
-          command: git fetch --unshallow || git fetch --all
+      - checkout: { fetch-depth: 0 }
       - setup_remote_docker
       - run:
           name: build
