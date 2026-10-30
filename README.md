@@ -1,12 +1,52 @@
 # Activity History Listener
-Listener application implementing an AWS function to receive messages that will result in an entity activity log.
 
-## Implementation
-This application subscribes to all of the SNS topics for housing solutions related events.
+.NET 10 AWS Lambda that consumes housing-solution events from SQS (published via SNS) and writes an activity log to the DynamoDB `ActivityHistory` table. This provides an audit logs for any events on MMH.
 
-It records to the 'ActivityHistory' DynamoDB table the occurrence of each event that was published to an SNS topic for other listener applications to consume.
 
 ## What for?
 These events are recorded to the 'ActivityHistory' table:
 * For audit log purposes - some of this recorded activity _(such as update operations)_ can also be looked up via a micro-frontend page for each entity managed by Manage My Home solution. When any uncertainty arises for why a certain entity's data is not shown as expected, audit logs allow seeing the name of the officer who last changed that data, as well as what that data was before the change was made.
 * We've had some cases where events either fail to get processed, or flat out seemingly disappear. Activity history table allows us to find these failed events & helps us debug the problem, as well as helps us fix data to what it should be.
+
+## Tech stack
+
+- .NET 10
+- Amazon SQS / SNS
+- DynamoDB, with DynamoDB Local for local development
+- AWS X-Ray
+
+## Layout
+
+Layers:
+- `ActivityListener/Boundary` — event contracts
+- `ActivityListener/UseCase` — message processing
+- `ActivityListener/Gateway` — DynamoDB access
+- `ActivityListener/SqsFunction.cs` — Lambda entry point
+- `ActivityListener.Tests` — unit and end-to-end tests (DynamoDB Local)
+
+## Prerequisites
+
+- .NET 10 SDK
+- Docker
+- `LBHPACKAGESTOKEN` for the private Hackney NuGet feed (`NuGet.Config`)
+
+## Run and test
+
+Start DynamoDB Local, then run the tests:
+
+```bash
+docker compose up dynamodb-database -d
+dotnet test ActivityListener.sln
+```
+
+Run the listener and DynamoDB Local together:
+
+```bash
+docker compose up --build
+```
+
+Package the Lambda (from `ActivityListener/`):
+
+```bash
+./build.sh
+```
